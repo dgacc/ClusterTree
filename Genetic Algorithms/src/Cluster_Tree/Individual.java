@@ -8,22 +8,27 @@ import java.util.Collections;
 import java.util.Random;
 
 public class Individual {
-	public int num_vertex = ReadFiles.num_vertex;
-	public double[][] gene =  new double[num_vertex][num_vertex]; 
-	InitializeChromosome chromosome = new InitializeChromosome();
+	public  static int num_vertex = ReadFiles.num_vertex;
+	public  double[][] gene =  new double[num_vertex][num_vertex]; 
+	InitializeChromosome initializechromosome = new InitializeChromosome();
+	
 	
 	public Individual() {
 	}
     public void inintilizeIndividual(){
-    	gene = chromosome.clusterPrimRST(ReadFiles.distances, ReadFiles.clusters, num_vertex);
-    	
+    	gene = initializechromosome.clusterPrimRST(ReadFiles.weightMatrix, ReadFiles.clusters, num_vertex);
+ 
     }
     // getter
     public double[][] getGene(){
     	return gene;
     }
+    //setter
+    public void setGene(double[][] gene){
+    	 this.gene = gene;	
+    }
     
-   
+    
 	/*public void printIndiv() {
 		for (int i = 0; i < num_vertex -2; i++) {
 			System.out.print(gene.get(i) + " ");

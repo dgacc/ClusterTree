@@ -12,6 +12,8 @@ public class GA {
 	private static Selection selection = new Selection();
 	private static ReadFiles readfiles = new ReadFiles();
 	private Evaluation evaluation = new Evaluation();
+	private InitializeChromosome initializeChromosome = new InitializeChromosome();
+	private  static int num_vertex = ReadFiles.num_vertex;
 
 	
 	
@@ -28,6 +30,7 @@ public class GA {
 			population.addIndiv(individual);
 		}
 		
+		
 		System.out.print("---------------------------------------------> CLUSTER TREE <--------------------------------------------------\n ");
 		//System.out.print("The best prufer number at first generation:\n ");
 		//pop.getBestIndividual().printIndiv(); // the best Individual  at first generation
@@ -38,35 +41,43 @@ public class GA {
 		for (int i = 0; i <  generation; i++) {
 			Population subPop = new Population(); // store new individuals are generated
 			for (int j = 0; j < Population.populationLength / 2; j++) {
-				Individual father = new Individual();
-				Individual mother = new Individual();
-				father = pop.selectIndiv(2, r); //use tournament to  select Individual 
-				mother = pop.selectIndiv(2, r); 
+				Individual father = new  Individual();
+				Individual mother = new  Individual();
+				
+				
+				//father = .selectIndiv(2, r); //use tournament to  select Individual 
+				//mother = pop.selectIndiv(2, r);
+				father = population.getIndividual(0);
+				mother = population.getIndividual(1);
+				//double[][] weightMatrixFather = population.buildWeightMatrixIndividual(father);
+				//double[][] weightMatrixMother = population.buildWeightMatrixIndividual(mother);
+					
 				// store  offspring  to use later 
-				ArrayList<Individual> offsprings = new ArrayList<Individual>();
+			    Individual offsprings =  new Individual();
 				// new  random number  [0;1]
 				double d = 0 + (1 - 0) * r.nextDouble();
 				// if random number >  crossover rate,  add  the individual to population without crossover 
-				if (d > p_rate) {
-					subPop.population.add(father);
-					subPop.population.add(mother);
-				} else {
+				//if (d > p_rate) {
+					//subPop.population.add(father);
+					//subPop.population.add(mother);
+				//} else {
+				
 					// else do crossover, generate two offsprings, then  do mutation
-					offsprings = crossover.clusterCrossover(father, mother, Individual.geneLength, Individual.clusters);
-					offsprings.get(0).mutation();
-					offsprings.get(1).mutation();
-					subPop.population.add(offsprings.get(0));
-					subPop.population.add(offsprings.get(1));
-				}
+					double[][] ngu = crossover.clusterCrossover(father.getGene(), mother.getGene(), num_vertex, ReadFiles.clusters);
+					//offsprings.get(0).mutation();
+					//offsprings.get(1).mutation();
+					subPop.population.add(offsprings);
+					subPop.population.add(offsprings);
+				//}
 			}
 			// add the best Individual  of old Population to new Population
-			ind = pop.getBestIndividual();
-			subPop.population.set(r.nextInt(Population.defaultPopLength), ind);
-			pop = subPop;
+			//ind = pop.getBestIndividual();
+			//subPop.population.set(r.nextInt(Population.defaultPopLength), ind);
+			//pop = subPop;
 		}
 		// the best Individual at all
 		System.out.print("The best prufer number after " + generation + " generations: \n");
-		pop.getBestIndividual().printIndiv();
+		//pop.getBestIndividual().printIndiv();
 	}
 }
 /* 

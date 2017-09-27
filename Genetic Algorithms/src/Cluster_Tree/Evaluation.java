@@ -11,7 +11,7 @@ public class Evaluation {
 	 * @param edgeMatrix
 	 * @param num_vertex
 	 * @param startVertex
-	 * @return  pathLenght: meaning the distance from root to the others; 
+	 * @return  pathLength: meaning the distance from root to the others vertex; 
 	 */
     public double clusterEvaluate(double[][] weightMatrix,double[][] edgeMatrix, int num_vertex, int startVertex){
      double pathLenght = 0;
@@ -21,7 +21,7 @@ public class Evaluation {
      
      // initialize the value to  new weight matrix
      for(int i = 0 ; i < num_vertex; i++){
-	   for( int j = 0; j < num_vertex; j++) {
+	   for( int j = 0; j < num_vertex; j++) { 	 	
 		   if( edgeMatrix[i][j] > 0){
 			   tempMatrix[i][j] = weightMatrix[i][j];
 		   }else{
