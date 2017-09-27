@@ -31,7 +31,7 @@ public class InitializeChromosome {
 		 for(int j = 0; j < numberClusterVertices; j++){
 			 for(int k = 0; k < numberClusterVertices; k++){
 				 if(clusterSpanningTree[j][k] > 0){
-					 tree[clusters.get(i).getCluster().get(j)][clusters.get(k).getCluster().get(k)] = clusterSpanningTree[j][k];
+					 tree[clusters.get(i).getCluster().get(j)][clusters.get(i).getCluster().get(k)] = clusterSpanningTree[j][k];
 				 }			 
 			 }
 		 }
@@ -41,12 +41,12 @@ public class InitializeChromosome {
 	 Cluster clusterRepresentation = new Cluster();
 	 for( int i = 0; i < ReadFiles.numberOfCluster; i++){
 		 int vertex = r.nextInt(clusters.get(i).getCluster().size());
-		 clusterRepresentation.getCluster().set(i, clusters.get(i).getCluster().get(vertex));
+		 clusterRepresentation.getCluster().add(clusters.get(i).getCluster().get(vertex));
 	 }
 	clusterWeightMatrix = buildClusterWeightMatrix(weightMatrix, clusterRepresentation.getCluster());
-    clusterSpanningTree = primRST(clusterWeightMatrix, num_vertices);
+    clusterSpanningTree = primRST(clusterWeightMatrix, ReadFiles.numberOfCluster);
     
-    // convert to spanning tree of  G Graph 
+    // Transformation to spanning tree of  G Graph 
     for( int i = 0; i < ReadFiles.numberOfCluster; i ++){
     	for( int j = 0; j < ReadFiles.numberOfCluster; j++){
     		if(clusterSpanningTree[i][j] > 0){
@@ -67,7 +67,7 @@ public class InitializeChromosome {
     contain.add(randomVertice);
     edgeListAdjacence.addAll(findEdge(num_vertices, randomVertice, contain, weightMatrix));
     
-    if(contain.size() <num_vertices){
+    while(contain.size() <num_vertices){
  	   
  	   if(contain.size() == 0)
  	   {   return null;   
@@ -80,7 +80,7 @@ public class InitializeChromosome {
  	   if( !contain.contains(tempEdge.endVertice)){
  		   
  		   tempTable[tempEdge.startVertice][tempEdge.endVertice] = 1.0;
- 		   tempTable[tempEdge.startVertice][tempEdge.endVertice] = 1.0;
+ 		   tempTable[tempEdge.endVertice][tempEdge.startVertice] = 1.0;
  		   
  		   contain.add(tempEdge.endVertice);
  		   edgeListAdjacence.addAll(findEdge(num_vertices, tempEdge.endVertice, contain, weightMatrix));

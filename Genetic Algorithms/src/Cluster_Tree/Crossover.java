@@ -5,7 +5,7 @@ import java.util.Random;
 
 
 public class Crossover {
-	InitializeChromosome chromosome = new InitializeChromosome();
+	InitializeChromosome initilizeChromosome = new InitializeChromosome();
 	
 	/**
 	 * 
@@ -53,7 +53,7 @@ public class Crossover {
 			}
 		}
 		
-		spanningTree = chromosome.primRST(G_cr, num_vertex);
+		spanningTree = initilizeChromosome.primRST(G_cr, num_vertex);
 	    return spanningTree;
 	}
 	// use crossover for each cluster
@@ -64,15 +64,15 @@ public class Crossover {
 		double[][] spanningTreeOfCluster;
 		int numberClusterVertex = 0;
 		int numberOfCluster = clusters.size();
-		for( int i = 0; i < num_vertex; i++){
+		for( int i = 0; i < numberOfCluster; i++){
 			numberClusterVertex = clusters.get(i).getCluster().size();
-			clusterWeightMatrix1 = chromosome.buildClusterWeightMatrix(father, clusters.get(i).getCluster());
-			clusterWeightMatrix2 = chromosome.buildClusterWeightMatrix(mother, clusters.get(i).getCluster());
+			clusterWeightMatrix1 = initilizeChromosome.buildClusterWeightMatrix(father, clusters.get(i).getCluster());
+			clusterWeightMatrix2 = initilizeChromosome.buildClusterWeightMatrix(mother, clusters.get(i).getCluster());
 			
 		    spanningTreeOfCluster = primRSTcrossover(clusterWeightMatrix1, clusterWeightMatrix2, numberClusterVertex);
 		    // convert to the graph tree
-		    for(int j = 0; i < numberClusterVertex; i++){
-		    	for(int k = 0; j < numberClusterVertex; j++){
+		    for(int j = 0; j < numberClusterVertex; j++){
+		    	for(int k = 0; k < numberClusterVertex; k++){
 		    		Tree[clusters.get(i).getCluster().get(j)][clusters.get(i).getCluster().get(k)] = spanningTreeOfCluster[j][k];		
 		    	}
 		    }
