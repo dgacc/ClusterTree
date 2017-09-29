@@ -80,5 +80,6 @@ public class GA {
 }
 /* 
  DIVIDE  tree to three group and  we have three group  inluding  vertices .
+ 
   */
 		

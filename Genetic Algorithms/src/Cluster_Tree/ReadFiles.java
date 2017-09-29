@@ -96,5 +96,4 @@ public class ReadFiles {
 		}
 		return num_vertex; // return number of vertex
 	}
-
 }
