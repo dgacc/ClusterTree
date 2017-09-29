@@ -27,6 +27,7 @@ public class Individual {
     public void setGene(double[][] gene){
     	 this.gene = gene;	
     }
+   
     
     
 	/*public void printIndiv() {

@@ -49,10 +49,8 @@ public class GA {
 				//mother = pop.selectIndiv(2, r);
 				father = population.getIndividual(0);
 				mother = population.getIndividual(1);
-				//double[][] weightMatrixFather = population.buildWeightMatrixIndividual(father);
-				//double[][] weightMatrixMother = population.buildWeightMatrixIndividual(mother);
-					
-				// store  offspring  to use later 
+				// test of mutation
+				double[][] mothers = mutation.mutationClusterTree(mother.getGene(), num_vertex, ReadFiles.clusters);
 			    Individual offsprings =  new Individual();
 				// new  random number  [0;1]
 				double d = 0 + (1 - 0) * r.nextDouble();
@@ -63,7 +61,7 @@ public class GA {
 				//} else {
 				
 					// else do crossover, generate two offsprings, then  do mutation
-					double[][] ngu = crossover.clusterCrossover(father.getGene(), mother.getGene(), num_vertex, ReadFiles.clusters);
+					double[][] newIndividual = crossover.clusterCrossover(father.getGene(), mother.getGene(), num_vertex, ReadFiles.clusters);
 					//offsprings.get(0).mutation();
 					//offsprings.get(1).mutation();
 					subPop.population.add(offsprings);
@@ -82,5 +80,6 @@ public class GA {
 }
 /* 
  DIVIDE  tree to three group and  we have three group  inluding  vertices .
+ 
   */
 		

@@ -14,6 +14,8 @@ public class ReadFiles {
 	public static int numberOfCluster; 
     public static int root;
     // files path: C:\Users\TrungTB\Desktop\16pr76.tsp
+    // or          C:\Users\TrungTB\Desktop\11eil51.clt
+    
 	
 	public static int clusterReadFiles() {
 		String fileName = null;
@@ -75,8 +77,10 @@ public class ReadFiles {
 				Cluster cluster = new Cluster();
 				for(int j = 0; j < numberClusterVertex -2; ++j ){
 					arrayCluster = Integer.parseInt(str[j+1]);
+					System.out.println(" " + arrayCluster);
 				     cluster.addElement(arrayCluster, j);
 				}
+				System.out.println();
 				clusters.add(cluster);
 			}
 			
@@ -92,5 +96,4 @@ public class ReadFiles {
 		}
 		return num_vertex; // return number of vertex
 	}
-
 }
