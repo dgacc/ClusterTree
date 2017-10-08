@@ -3,6 +3,8 @@ package Cluster_Tree;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JFrame;
+
 public class Mutations {
 	private static Random r = new Random();
 	InitializeChromosome chromosome = new InitializeChromosome();
@@ -20,7 +22,21 @@ public class Mutations {
 			for( int j = 0; j < num_vertex; j++){
 				offspring[i][j] = parents[i][j]; 
 			}
-		}
+		}  
+//		// paint   
+//		 JFrame gf1 = new JFrame();
+//			gf1.setVisible(true);
+//			gf1.setSize(720, 720);
+//			gf1.setTitle(" cha me truoc cua cluster");
+//			gf1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//			gf1.setVisible(true);
+//			
+//			Paint  p1 = new Paint();
+//			p1.weightMatrix = parents;
+//			p1.num_vertex = num_vertex;
+//		    gf1.add(p1);
+//		    gf1.setVisible(true);
+		
 		int startVertex = r.nextInt(num_vertex);
 		int endVertex = r.nextInt(num_vertex);
 		
@@ -34,6 +50,8 @@ public class Mutations {
 		 // initialize  two matrix visited  matrix = false and pre Matrix = -1;
 		boolean[] visited = new boolean[num_vertex];
 		int[] pre = new int[num_vertex];
+		
+	
 		for( int i = 0; i < num_vertex; i ++ ){
 			visited[i] = false;
 			pre[i] = -1;
@@ -46,12 +64,24 @@ public class Mutations {
 		int index1 = r.nextInt(path.size() - 1);
 		int index2 =  index1 + 1;
 		
-		offspring[path.get(index1)][path.get(index2)] = 0f;
-		offspring[path.get(index2)][path.get(index1)] = 0f;
+		offspring[path.get(index1)][path.get(index2)] = 0.0f;
+		offspring[path.get(index2)][path.get(index1)] = 0.0f;
 		
-		offspring[path.get(startVertex)][path.get(endVertex)] = 1f;
-		offspring[path.get(endVertex)][path.get(startVertex)] = 1f;
-		
+		offspring[startVertex][endVertex] = 1.0f;
+		offspring[endVertex][startVertex] = 1.0f;
+//		// paint  
+//		JFrame gf11 = new JFrame();
+//			gf11.setVisible(true);
+//			gf11.setSize(720, 720);
+//			gf11.setTitle("cluster sau khi dot bien ");
+//			gf11.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//			gf11.setVisible(true);
+//			
+//			Paint  p11 = new Paint();
+//			p11.weightMatrix = offspring;
+//			p11.num_vertex = num_vertex;
+//		    gf11.add(p11);
+//		    gf11.setVisible(true);
 		return offspring;
 		
 	}
@@ -82,6 +112,7 @@ public class Mutations {
 		}
 		
 		int numberClusterVertex = clusters.get(indexCluster).getCluster().size();
+		
 		// create the weight matrix, and spanning tree for that  cluster then  do mutation
 		double[][] clusterWeightMatrix = new double[numberClusterVertex][numberClusterVertex];
 		double[][] clusterSpanningTree = new double[numberClusterVertex][numberClusterVertex];
@@ -97,6 +128,7 @@ public class Mutations {
 						[clusters.get(indexCluster).getCluster().get(j)] = clusterSpanningTree[i][j];
 			}
 		}
+		
 		return offspring;
 	}
 

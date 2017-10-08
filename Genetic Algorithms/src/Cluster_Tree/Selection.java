@@ -3,16 +3,26 @@ package Cluster_Tree;
 import java.util.Random;
 
 public class Selection {
-	Population  population = new Population();
-	public Individual selectIndiv(int tournament_size, Random r) {
-		int k = r.nextInt(Population.populationLength);
-		for (int i = 0; i < tournament_size; i++) {
-			int j = r.nextInt(Population.populationLength);
-			if (population.getIndividual(k).getClass(). > population.get(j).getFitness()) {
-				k = j;
+	Individual individual  = new Individual();
+	
+	
+	public int  touranmentSelection(double[] populationfitness, int tournament_size, Random r) {
+		int[] tournamentGroup = new int[tournament_size];
+		int index = 0;
+		for(int i = 0 ; i < tournament_size; i++){
+		tournamentGroup[i] = r.nextInt(Population.populationLength);	
+		}
+		
+		double tempTour = populationfitness[tournamentGroup[0]];
+		
+		for( int i = 1; i < tournament_size; i++ ){
+			if( tempTour < populationfitness[tournamentGroup[i]] ){
+				tempTour = populationfitness[tournamentGroup[i]];
+				index = tournamentGroup[i];
 			}
 		}
-		return population.get(k);
+		return index;
+		
 	}
 
 

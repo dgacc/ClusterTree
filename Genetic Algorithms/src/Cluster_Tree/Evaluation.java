@@ -1,6 +1,8 @@
 package Cluster_Tree;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 
 public class Evaluation {
@@ -14,7 +16,7 @@ public class Evaluation {
 	 * @return  pathLength: meaning the distance from root to the others vertex; 
 	 */
     public double clusterEvaluate(double[][] weightMatrix,double[][] edgeMatrix, int num_vertex, int startVertex){
-     double pathLenght = 0;
+     double pathLength = 0;
      int[] pre = new int[num_vertex];
      ArrayList<Integer> path = new ArrayList<Integer>();
      double[][] tempMatrix = new double[num_vertex][num_vertex];
@@ -34,13 +36,38 @@ public class Evaluation {
      for( int i = 1 ; i < num_vertex; i++){
     	 path = graphMethodsClass.printPath(startVertex, i, pre);
     	 for( int j = path.size() -1; j > 0 ; j --){
-    		 pathLenght = pathLenght  + tempMatrix[path.get(j)][path.get(j - 1)];
+    		 pathLength = pathLength  + tempMatrix[path.get(j)][path.get(j - 1)];
     		 
     	 }
      }
-     return  pathLenght;
+     return  pathLength;
      }
     
+    public double evaluation(double[][] weightMatrix, double[][] tree, int num_vertex, int startVertex){
+    	 double[]  distances  =  new double[num_vertex];// distance between root and the others
+    	 double sum  = 0;
+    	 distances[startVertex] = 0;
+    	 boolean[] mark = new boolean[num_vertex];
+    	 Queue<Integer> queue  = new LinkedList<>();
+    	 for( int i = 0; i < num_vertex; i ++){
+    		 mark[i] = true;
+    	 }
+    	 queue.add(startVertex);
+    	 while(!queue.isEmpty()){
+    		 int u = queue.poll();
+    		 mark[u] = false;
+    		 for( int i = 0; i < num_vertex; i++){
+    			 if(tree[u][i] > 0 && mark[i] ){
+    				queue.add(i);
+    				mark[i] = false;
+    				distances[i] =  distances[u] + weightMatrix[u][i];
+    				sum += distances[i]; 
+    				
+    			 }
+    		 }
+    	 }
+    	 return sum;
+    }
     
 }
 

@@ -9,23 +9,26 @@ import java.util.ArrayList;
 public class ReadFiles {
 	public static ArrayList<Cluster> clusters = new ArrayList<Cluster>();
 	private  Cluster cluster = new Cluster();
+	public static Vertex[] vertices = new Vertex[76];
 	public static int num_vertex = clusterReadFiles();
 	public static double weightMatrix[][];
 	public static int numberOfCluster; 
     public static int root;
-    // files path: C:\Users\TrungTB\Desktop\16pr76.tsp
+	
+    // files path: C:/Users/TrungTB/Desktop16pr76.tsp
     // or          C:\Users\TrungTB\Desktop\11eil51.clt
+    //C:/Users/TrungTB/Documents/Visual Studio 2017/Projects/D. MFO_Standard_31072017/MFO/bin/Debug/5ulysses22.clt
     
 	
 	public static int clusterReadFiles() {
-		String fileName = null;
+		String fileName = "C:/Users/TrungTB/Desktop/11eil51.clt";
 		// read filename from keyboard
-		try {
-			BufferedReader buf = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("Input file name:");
-			fileName = buf.readLine();
-		} catch (IOException ex) {
-		}
+//		try {
+//			BufferedReader buf = new BufferedReader(new InputStreamReader(System.in));
+//			System.out.println("Input file name:");
+//			fileName = buf.readLine();
+//		} catch (IOException ex) {
+//		}
 		BufferedReader br = null; // string to store data from file
 		int num_vertex = 0;
 		try {
@@ -43,7 +46,6 @@ public class ReadFiles {
 			numberOfCluster = Integer.parseInt(str[1]);
 			sCurrentLine = br.readLine(); 
 			sCurrentLine = br.readLine();
-			Vertex[] vertices = new Vertex[num_vertex];
 			
 			// read the detail of the vertex
 			for (int j = 0; j < num_vertex; j++) {
@@ -77,7 +79,6 @@ public class ReadFiles {
 				Cluster cluster = new Cluster();
 				for(int j = 0; j < numberClusterVertex -2; ++j ){
 					arrayCluster = Integer.parseInt(str[j+1]);
-					System.out.println(" " + arrayCluster);
 				     cluster.addElement(arrayCluster, j);
 				}
 				System.out.println();
