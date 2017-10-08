@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class InitializeChromosome {
-	private Random r = new Random();
+	private Random a = new Random();
 
 	public double[][] buildClusterWeightMatrix(double[][] weightMatrix, ArrayList<Integer> cluster) {
 		int numberClusterVertices = cluster.size();
@@ -42,7 +42,7 @@ public class InitializeChromosome {
 		// Each cluster is represented by one vertex
 		Cluster clusterRepresentation = new Cluster();
 		for (int i = 0; i < ReadFiles.numberOfCluster; i++) {
-			int vertex = r.nextInt(clusters.get(i).getCluster().size());
+			int vertex = a.nextInt(clusters.get(i).getCluster().size());
 			clusterRepresentation.getCluster().add(clusters.get(i).getCluster().get(vertex));
 		}
 		clusterWeightMatrix = buildClusterWeightMatrix(weightMatrix, clusterRepresentation.getCluster());
@@ -67,7 +67,7 @@ public class InitializeChromosome {
 		ArrayList<Edge> edgeListAdjacence = new ArrayList<Edge>();
 		double[][] tempTable = new double[num_vertices][num_vertices];
 
-		randomVertice = r.nextInt(num_vertices);
+		randomVertice = a.nextInt(num_vertices);
 		contain.add(randomVertice);
 		edgeListAdjacence.addAll(findEdge(num_vertices, randomVertice, contain, weightMatrix));
 
@@ -77,15 +77,16 @@ public class InitializeChromosome {
 				return null;
 			}
 
-			indexRandomEdge = r.nextInt(contain.size());
+			//indexRandomEdge = r.nextInt(contain.size());
+			indexRandomEdge = a.nextInt(edgeListAdjacence.size());
 			Edge tempEdge = new Edge(edgeListAdjacence.get(indexRandomEdge).startVertice,
 					edgeListAdjacence.get(indexRandomEdge).endVertice);
 			edgeListAdjacence.remove(indexRandomEdge);
 
 			if (!contain.contains(tempEdge.endVertice)) {
 
-				tempTable[tempEdge.startVertice][tempEdge.endVertice] = 1.0;
-				tempTable[tempEdge.endVertice][tempEdge.startVertice] = 1.0;
+				tempTable[tempEdge.startVertice][tempEdge.endVertice] = 1.0f;
+				tempTable[tempEdge.endVertice][tempEdge.startVertice] = 1.0f;
 
 				contain.add(tempEdge.endVertice);
 				edgeListAdjacence.addAll(findEdge(num_vertices, tempEdge.endVertice, contain, weightMatrix));

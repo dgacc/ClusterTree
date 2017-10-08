@@ -11,6 +11,7 @@ public class Individual {
 	public  static int num_vertex = ReadFiles.num_vertex;
 	public  double[][] gene =  new double[num_vertex][num_vertex]; 
 	InitializeChromosome initializechromosome = new InitializeChromosome();
+	Evaluation evaluation = new Evaluation();
 	
 	
 	public Individual() {
@@ -27,20 +28,10 @@ public class Individual {
     public void setGene(double[][] gene){
     	 this.gene = gene;	
     }
+    
+    // get fitness
+    public double getFitness(Individual individual){
+    	 return evaluation.evaluation(ReadFiles.weightMatrix, individual.getGene(), num_vertex, ReadFiles.root);
+    }
    
-    
-    
-	/*public void printIndiv() {
-		for (int i = 0; i < num_vertex -2; i++) {
-			System.out.print(gene.get(i) + " ");
-		}
-		System.out.println();
-		System.out.print("The Spanning  Tree  Cost is :  ");
-		System.out.print(this.getFitness());
-		System.out.println();
-		System.out.println("________________________________________________________________________________________________________________________________________________");
-
-		System.out.println();
-	}
-	*/
 }

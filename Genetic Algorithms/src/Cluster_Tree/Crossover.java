@@ -3,6 +3,8 @@ package Cluster_Tree;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.JFrame;
+
 
 public class Crossover {
 	InitializeChromosome initilizeChromosome = new InitializeChromosome();
@@ -19,22 +21,23 @@ public class Crossover {
 		double[][]  tree = new double[numberOfCluster][numberOfCluster];
 		int numberClusterVertex1 = 0;
 		int numberClusterVertex2 = 0; 
-		for( int i = 0; i < num_vertex; i++ ){
-			for( int j = 0; j < num_vertex; j++){
+		for( int i = 0; i < numberOfCluster; i++ ){
+			for( int j = 0; j < numberOfCluster; j++){
 				tree[i][j] = 0; 
 				tree[j][i] = 0;
 			}
 		}
-		
-		for( int i = 0; i < numberOfCluster; i++){
+		 
+		    for( int i = 0; i < numberOfCluster; i++){
 			numberClusterVertex1 = clusters.get(i).getCluster().size();
 			for( int j = 0; j < numberClusterVertex1; j++){
 				for( int k = i + 1; k < numberOfCluster; k++ ){
 					numberClusterVertex2 = clusters.get(k).getCluster().size();
+					
 					for( int t = 0; t < numberClusterVertex2; t++){
 					if(parent[clusters.get(i).getCluster().get(j)][clusters.get(k).getCluster().get(t)] > 0){
-						tree[j][t] = parent[clusters.get(i).getCluster().get(j)][clusters.get(k).getCluster().get(t)];
-						tree[t][j] = tree[j][t];
+						tree[i][k] = parent[clusters.get(i).getCluster().get(j)][clusters.get(k).getCluster().get(t)];
+						tree[k][i] = tree[i][k];
 					}
 					}
 				}
@@ -50,6 +53,7 @@ public class Crossover {
 		for(int i = 0; i < num_vertex; i++){
 			for(int j = 0; j< num_vertex; j++){
 				G_cr[i][j] = father[i][j] + mother[i][j];
+				
 			}
 		}
 		
@@ -70,19 +74,21 @@ public class Crossover {
 			clusterWeightMatrix2 = initilizeChromosome.buildClusterWeightMatrix(mother, clusters.get(i).getCluster());
 			
 		    spanningTreeOfCluster = primRSTcrossover(clusterWeightMatrix1, clusterWeightMatrix2, numberClusterVertex);
+//		    
 		    // convert to the graph tree
 		    for(int j = 0; j < numberClusterVertex; j++){
 		    	for(int k = 0; k < numberClusterVertex; k++){
 		    		Tree[clusters.get(i).getCluster().get(j)][clusters.get(i).getCluster().get(k)] = spanningTreeOfCluster[j][k];		
 		    	}
 		    }
+		 
 		}
 		    // build the vertex representation for each cluster
 		    clusterWeightMatrix1 = findSpanningTreeBetweenClusters(father, num_vertex, clusters);
 		    clusterWeightMatrix2 = findSpanningTreeBetweenClusters(mother, num_vertex, clusters);
 		    
 		    // generate the new offspring
-		    spanningTreeOfCluster = primRSTcrossover(father, mother, num_vertex);
+		    spanningTreeOfCluster = primRSTcrossover(clusterWeightMatrix1, clusterWeightMatrix1, numberOfCluster);
 		    // convert to spanning tree of Graph
 		    int[] indexCluster = new int[numberOfCluster];
 		    Random r = new Random();
@@ -98,7 +104,5 @@ public class Crossover {
 		    	}
 		    }
 		    return Tree;
-		    
 	}
-
-}
+   }
