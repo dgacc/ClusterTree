@@ -23,19 +23,7 @@ public class Mutations {
 				offspring[i][j] = parents[i][j]; 
 			}
 		}  
-//		// paint   
-//		 JFrame gf1 = new JFrame();
-//			gf1.setVisible(true);
-//			gf1.setSize(720, 720);
-//			gf1.setTitle(" cha me truoc cua cluster");
-//			gf1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//			gf1.setVisible(true);
-//			
-//			Paint  p1 = new Paint();
-//			p1.weightMatrix = parents;
-//			p1.num_vertex = num_vertex;
-//		    gf1.add(p1);
-//		    gf1.setVisible(true);
+		
 		
 		int startVertex = r.nextInt(num_vertex);
 		int endVertex = r.nextInt(num_vertex);
@@ -69,19 +57,7 @@ public class Mutations {
 		
 		offspring[startVertex][endVertex] = 1.0f;
 		offspring[endVertex][startVertex] = 1.0f;
-//		// paint  
-//		JFrame gf11 = new JFrame();
-//			gf11.setVisible(true);
-//			gf11.setSize(720, 720);
-//			gf11.setTitle("cluster sau khi dot bien ");
-//			gf11.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//			gf11.setVisible(true);
-//			
-//			Paint  p11 = new Paint();
-//			p11.weightMatrix = offspring;
-//			p11.num_vertex = num_vertex;
-//		    gf11.add(p11);
-//		    gf11.setVisible(true);
+//		
 		return offspring;
 		
 	}

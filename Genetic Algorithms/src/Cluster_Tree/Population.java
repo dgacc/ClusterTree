@@ -29,4 +29,12 @@ public class Population {
 		}
 		return popFitness;
 	}
+	public double[] populationFitness1(){
+		double[] popFitness = new double[populationLength];
+		for( int i = 0; i < populationLength; i++){
+			popFitness[i] = evaluation.distanceEvaluate(ReadFiles.weightMatrix, population.get(i).getGene(), ReadFiles.num_vertex, ReadFiles.root);
+		}
+		return popFitness;
+	}
+	
 	}

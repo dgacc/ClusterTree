@@ -1,6 +1,8 @@
 package Cluster_Tree;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class GraphMethods {
 	public ArrayList<Integer> printPath( int start_vertice, int end_vertice, int[] pre){
@@ -77,5 +79,71 @@ public class GraphMethods {
         }
 	return truoc;
 	}
+	public int[] get_Vertex_In_Each_SubGraph(double[][] weigh_Matrix, int num_Vertex) {
+		int[] chua_Xet = new int[num_Vertex];
+		int solt = 0;
+		for (int i = 0; i < num_Vertex; i++) {
+			chua_Xet[i] = -1;
+		}
+		for (int i = 0; i < num_Vertex; i++) {
+			if (chua_Xet[i] == -1) {
+
+				BFS(weigh_Matrix, num_Vertex, chua_Xet, solt, i);
+				solt++;
+			}
+		}
+
+		int[] vertex_In_SubGraph = new int[solt];
+		for (int i = 0; i < solt; i++) {
+			for (int j = 0; j < num_Vertex; j++) {
+				if (chua_Xet[j] == i) {
+					vertex_In_SubGraph[i] = j;
+				}
+			}
+		}
+
+		return vertex_In_SubGraph;
+	}
 	
+	
+	public int[] BFS(double[][] weigh_Matrix, int num_Vertex, int[] chua_Xet, int solt, int start_Vertex) {
+		int[] QUEUE = new int[num_Vertex];
+		// bool[] chua_Xet = new bool[num_Vertex];
+		int[] truoc = new int[num_Vertex];// ko can vi ko can tim duoc di
+		int u, dauQ, cuoiQ;
+
+		for (int i = 0; i < num_Vertex; i++) {
+			// chua_Xet[i] = true;
+			truoc[i] = start_Vertex;
+			QUEUE[i] = -1;
+		}
+		truoc[start_Vertex] = -1;
+		dauQ = 0;
+		cuoiQ = 0;
+		QUEUE[cuoiQ] = start_Vertex;
+		chua_Xet[start_Vertex] = solt;
+
+		while (dauQ <= cuoiQ) {
+			u = QUEUE[dauQ];
+			dauQ++;
+			for (int i = 0; i < num_Vertex; i++) {
+
+				if (weigh_Matrix[u][i] == Double.MAX_VALUE) {
+					continue;
+				} else {
+					if ((weigh_Matrix[u][i] > 0) && (chua_Xet[i] == -1)) {
+						cuoiQ++;
+						QUEUE[cuoiQ] = i;
+						chua_Xet[i] = solt;
+						truoc[i] = u;
+					}
+				}
+			} // for
+		} // while
+		return truoc;
+	}
+
+	//
+	
+
 }

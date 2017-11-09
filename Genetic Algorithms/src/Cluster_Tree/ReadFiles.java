@@ -1,45 +1,43 @@
 package Cluster_Tree;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ReadFiles {
 	public static ArrayList<Cluster> clusters = new ArrayList<Cluster>();
-	private  Cluster cluster = new Cluster();
-	public static Vertex[] vertices = new Vertex[76];
+	public static Vertex[] vertices = new Vertex[5000];
+	//public static int num_vertex = clusterReadFiles();
 	public static int num_vertex = clusterReadFiles();
+//	public static double weightMatrix[][] = readWeightMatrix();
 	public static double weightMatrix[][];
 	public static int numberOfCluster; 
     public static int root;
 	
-    // files path: C:/Users/TrungTB/Desktop16pr76.tsp
-    // or          C:\Users\TrungTB\Desktop\11eil51.clt
-    //C:/Users/TrungTB/Documents/Visual Studio 2017/Projects/D. MFO_Standard_31072017/MFO/bin/Debug/5ulysses22.clt
     
 	
 	public static int clusterReadFiles() {
-		String fileName = "C:/Users/TrungTB/Desktop/11eil51.clt";
-		// read filename from keyboard
-//		try {
-//			BufferedReader buf = new BufferedReader(new InputStreamReader(System.in));
-//			System.out.println("Input file name:");
-//			fileName = buf.readLine();
-//		} catch (IOException ex) {
-//		}
+//    public static int clusterReadFiles(String fileName) {
+		String fileName = "C:/Users/TrungTB/Desktop/test/5eil51.clt";
 		BufferedReader br = null; // string to store data from file
-		int num_vertex = 0;
 		try {
 			String sCurrentLine = null;
 			br = new BufferedReader(new FileReader(fileName));
 			// read lines 1..4
-			for (int j = 0; j < 4; j++) {
+			for (int j = 0; j < 3; j++) {
 				sCurrentLine = br.readLine();
 			}
+//			System.out.println(" str =  "+str[1]);
 			String[] str = sCurrentLine.split(": ");
+			System.out.println(" str =  "+str[1]);
 			num_vertex = Integer.parseInt(str[1]); 
+			
+//			weightMatrix = new double[num_vertex][num_vertex];
 			weightMatrix = new double[num_vertex][num_vertex];
 			sCurrentLine = br.readLine();
 			str = sCurrentLine.split(": ");
@@ -50,7 +48,7 @@ public class ReadFiles {
 			// read the detail of the vertex
 			for (int j = 0; j < num_vertex; j++) {
 				sCurrentLine = br.readLine();
-				str = sCurrentLine.split(" ");
+				str = sCurrentLine.split("\\s+");
 				vertices[j] = new Vertex();
 				// set coordinates to city
 				vertices[j].setX(Double.parseDouble(str[1]));
@@ -60,7 +58,8 @@ public class ReadFiles {
 					if (i == j) {
 						weightMatrix[j][i] = 0;
 					} else {
-						weightMatrix[j][i] = weightMatrix[i][j] = Math.sqrt(Math.pow((vertices[j].getX() - vertices[i].getX()), 2)
+						weightMatrix[j][i] = weightMatrix[i][j] = Math.sqrt(Math.pow((vertices[j].getX()
+								- vertices[i].getX()), 2)
 								+ Math.pow((vertices[j].getY() - vertices[i].getY()), 2));
 					}
 				}
@@ -81,7 +80,7 @@ public class ReadFiles {
 					arrayCluster = Integer.parseInt(str[j+1]);
 				     cluster.addElement(arrayCluster, j);
 				}
-				System.out.println();
+//				System.out.println();
 				clusters.add(cluster);
 			}
 			
@@ -96,5 +95,32 @@ public class ReadFiles {
 			}
 		}
 		return num_vertex; // return number of vertex
+	}
+	public static double[][] readWeightMatrix(){
+		String filename= "C:/Users/TrungTB/git/ClusterTree/Genetic Algorithms/4eil76NON.txt";
+		Scanner sc;
+		double optimalCost;
+		double[][] weghtMatrix2 = new double [num_vertex][num_vertex];
+		try {
+			sc = new Scanner(new File(filename));
+			sc.nextLine();
+			sc.nextLine();
+			sc.nextLine();
+//	     	optimalCost = sc.nextDouble();
+			for( int i = 0; i < num_vertex; i++ ){
+				for( int j = 0; j < num_vertex; j++){
+					weghtMatrix2[i][j] = sc.nextDouble();
+					System.out.print(" " + weghtMatrix2[i][j]);
+				}
+				System.out.println();
+			}
+	
+		} catch (FileNotFoundException e) {
+		
+			e.printStackTrace();
+		}
+		
+		return weghtMatrix2;
+		
 	}
 }
