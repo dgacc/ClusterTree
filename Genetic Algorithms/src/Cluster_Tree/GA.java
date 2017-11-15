@@ -1,29 +1,40 @@
 package Cluster_Tree;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 //import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
+
+import Files_InOut.ReadFiles;
+import Operator.Crossover;
+import Operator.Mutations;
+import Operator.Selection;
+import Structures.Individual;
+import Structures.Population;
 public class GA{
 	private static double m_rate = 0.15;
 	private static final double p_rate = 0.8; // crossover rate
 	private static  Random r = new Random();  
-	private static  int generation = 10000;  
+	private static  int generation = 5000;  
 	public static int populationLength = 100; // default length of population
 	private static Crossover crossover = new Crossover();
 	private static Mutations mutation = new Mutations();
 	private static Selection selection = new Selection();
-	private  static int num_vertex = ReadFiles.num_vertex;
-//	private static int num_vertex;
-	
+
 	
 	public static void main(String[] args) {
-//		ReadFiles.clusterReadFiles("C:/Users/TrungTB/Desktop/test/5eil51.clt");
+		ReadFiles.clusterReadFiles("C:/Users/TrungTB/Desktop/test/5eil51.clt");
+//	    ReadFiles.clusterReadFiles("C:/Users/TrungTB/Desktop/test/" +args[0]+ ".clt");
+		int  num_vertex = ReadFiles.num_vertex;
 	
-		JFrame gf = new JFrame();
-		gf.setVisible(true);
-		gf.setSize(800, 800);
-		gf.setTitle("the best Individual");
-		gf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gf.setVisible(true);
+//		JFrame gf = new JFrame();
+//		gf.setVisible(true);
+//		gf.setSize(800, 800);
+//		gf.setTitle("the best Individual");
+//		gf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		gf.setVisible(true);
 	
 ///*-----------------------------------------Build the new instance--------------------------------------------------------------*/
 //		//optimal tree
@@ -85,8 +96,17 @@ public class GA{
 //	     	
 //		    
 ///*--------------------------------------------------------END-------------------------------------------------------------*/
-		    
-		    
+		  PrintWriter pw = null;
+			try {
+				pw = new PrintWriter(new FileWriter(new File(args[1]), true));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		 
+		  
+		  for(int loop = 0; loop < 7; loop ++){
+			  
+		    System.out.println(loop);
 			// Initialize population
 		Population population = new Population();
 		for( int i = 0; i < populationLength; i++  ){
@@ -100,11 +120,10 @@ public class GA{
 		System.out.println("Mutation  rate : " + m_rate);
 		System.out.println("The number of generation : " +generation);
 		
-		
 		for (int i = 0; i <  generation; i++) {
 			Population subPop = new Population(); // store new individuals are generated
 			double[] popFitness = population.populationFitness();
-			double[] popFitness1 = population.populationFitness1();
+//			double[] popFitness1 = population.populationFitness1();
 			
 			
 			for (int j = 0; j < Population.populationLength / 2; j++) {
@@ -127,15 +146,15 @@ public class GA{
 					subPop.addIndiv(mother);
 			     } else {
 			//	 else do crossover, generate two offsprings, then  do mutation
-//			    	offspring1.setGene(crossover.clusterCrossover(father.getGene(), mother.getGene(),
-//	   		    		       num_vertex, ReadFiles.clusters));
-//			    	offspring2.setGene(crossover.clusterCrossover(father.getGene(), mother.getGene(),
-//		    		       num_vertex, ReadFiles.clusters)); 
-					offspring1.setGene(crossover.ClusterBFSCrossover(father.getGene(), mother.getGene(),
-   		    		       num_vertex, ReadFiles.clusters));
-					
-					offspring2.setGene(crossover.ClusterBFSCrossover(father.getGene(), mother.getGene(),
+			    	offspring1.setGene(crossover.clusterCrossover(father.getGene(), mother.getGene(),
 	   		    		       num_vertex, ReadFiles.clusters));
+			    	offspring2.setGene(crossover.clusterCrossover(father.getGene(), mother.getGene(),
+		    		       num_vertex, ReadFiles.clusters)); 
+//					offspring1.setGene(crossover.ClusterBFSCrossover(father.getGene(), mother.getGene(),
+//   		    		       num_vertex, ReadFiles.clusters));
+//					
+//					offspring2.setGene(crossover.ClusterBFSCrossover(father.getGene(), mother.getGene(),
+//	   		    		       num_vertex, ReadFiles.clusters));
 //					
 					if( d < m_rate){
 						 offspring1.setGene(mutation.mutationClusterTree(mother.getGene(),
@@ -159,17 +178,18 @@ public class GA{
 				 bestFiness = popFitness[t];
 				  bestFinessIndex = t;
 			 }
+			
 			}
 			// paint graph	
-			Paint  p = new Paint();
-			p.weightMatrix = population.getIndividual(bestFinessIndex).getGene();
-			p.fitness = popFitness[bestFinessIndex];
-			p.fitness1 = popFitness1[bestFinessIndex];
-			p.num_vertex = num_vertex;
-		    gf.add(p);
-		    gf.setVisible(true);
-		    
-		    
+//			Paint  p = new Paint();
+//			p.weightMatrix = population.getIndividual(bestFinessIndex).getGene();
+//			p.fitness = popFitness[bestFinessIndex];
+//			p.fitness1 = popFitness1[bestFinessIndex];
+//			p.num_vertex = num_vertex;
+//		    gf.add(p);
+//		    gf.setVisible(true);
+//		    
+//		    
 			// add the best Individual  of old Population to new Population
 			subPop.population.set(r.nextInt(Population.populationLength), 
 					population.getIndividual(bestFinessIndex));	
@@ -185,23 +205,30 @@ public class GA{
 				  bestFinessIndex = t;
 			 }
 			}
-		
-		JFrame gf1 = new JFrame();
-		gf1.setVisible(true);
-		gf1.setSize(800, 800);
-		gf1.setTitle("the best ever");
-		gf1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gf1.setVisible(true);
-		Paint  p = new Paint();
-		p.weightMatrix = population.getIndividual(bestFinessIndex).getGene();
-		p.fitness = popFitness[bestFinessIndex];
-		p.num_vertex = num_vertex;
-	    gf1.add(p);
-	    gf1.setVisible(true);
+//		
+//		JFrame gf1 = new JFrame();
+//		gf1.setVisible(true);
+//		gf1.setSize(800, 800);
+//		gf1.setTitle("the best ever");
+//		gf1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		gf1.setVisible(true);
+//		Paint  p = new Paint();
+//		p.weightMatrix = population.getIndividual(bestFinessIndex).getGene();
+//		p.fitness = popFitness[bestFinessIndex];
+//		p.num_vertex = num_vertex;
+//	    gf1.add(p);
+//	    gf1.setVisible(true);
+	    
+	    // print to files
+		 pw.println(popFitness[bestFinessIndex]);
+		 
+		 
 	    
 		
 		// the best Individual at all
 	   //	System.out.print("The best prufer number after " + generation + " generations: \n");
 	}
+		  pw.close();
+		  }
 }
 
