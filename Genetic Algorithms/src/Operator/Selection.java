@@ -1,6 +1,9 @@
-package Cluster_Tree;
+package Operator;
 
 import java.util.Random;
+
+import Structures.Individual;
+import Structures.Population;
 
 public class Selection {
 	Individual individual  = new Individual();

@@ -1,4 +1,4 @@
-package Cluster_Tree;
+package Structures;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import Files_InOut.ReadFiles;
+import Operator.Evaluation;
+import Operator.InitializeChromosome;
+
 public class Individual {
 	public  static int num_vertex = ReadFiles.num_vertex;
 	public  double[][] gene =  new double[num_vertex][num_vertex]; 
@@ -14,7 +18,7 @@ public class Individual {
 	Evaluation evaluation = new Evaluation();
 	private double[] constraintViolation;
 	private double[] factorialCost;
-	double cost;
+	public double cost;
 	private int[] factorialRank = new int[2];
 	double scalarFitness;
 	int skillFactor;
@@ -23,7 +27,7 @@ public class Individual {
 	public Individual() {
 	}
     public void inintilizeIndividual(){
-    	gene = initializechromosome.clusterPrimRST(ReadFiles.weightMatrix, ReadFiles.clusters, num_vertex);
+    	gene = initializechromosome.clusterPrimRST(ReadFiles.weightMatrix, ReadFiles.clusters, ReadFiles.num_vertex);
  
     }
     // getter
@@ -37,7 +41,7 @@ public class Individual {
     
     // get fitness
     public double getFitness(Individual individual){
-    	 return evaluation.evaluation(ReadFiles.weightMatrix, individual.getGene(), num_vertex, ReadFiles.root);
+    	 return evaluation.evaluation(ReadFiles.weightMatrix, individual.getGene(),  ReadFiles.num_vertex, ReadFiles.root);
     }
 	public void setFactorialRank(int rank, int index) {
 		this.factorialRank[index] = rank;

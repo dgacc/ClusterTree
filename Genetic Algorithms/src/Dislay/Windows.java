@@ -1,4 +1,4 @@
-package Cluster_Tree;
+package Dislay;
 
 import javax.swing.JFrame;
 

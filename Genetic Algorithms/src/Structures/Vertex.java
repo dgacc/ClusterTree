@@ -1,4 +1,4 @@
-package Cluster_Tree;
+package Structures;
 
 public class Vertex {
 	double x;

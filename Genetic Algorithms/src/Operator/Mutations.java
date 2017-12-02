@@ -1,12 +1,13 @@
-package Cluster_Tree;
+package Operator;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JFrame;
 
+import Structures.Cluster;
+
 public class Mutations {
-	private static Random r = new Random();
 	InitializeChromosome chromosome = new InitializeChromosome();
 	GraphMethods graphMethods = new GraphMethods();
 	
@@ -16,7 +17,7 @@ public class Mutations {
 	 * @param num_vertex
 	 * @return
 	 */
-	public double[][] mutationForEachClusters(double[][] parents,int num_vertex){
+	public double[][] mutationForEachClusters(double[][] parents,int num_vertex , Random r){
 		double[][] offspring = new double[num_vertex][num_vertex];
 		for(  int i = 0; i < num_vertex; i++){
 			for( int j = 0; j < num_vertex; j++){
@@ -70,7 +71,7 @@ public class Mutations {
 	 * @param clusters
 	 * @return
 	 */
-	public double[][] mutationClusterTree(double[][] parent, int num_vertex, ArrayList<Cluster> clusters){
+	public double[][] mutationClusterTree(double[][] parent, int num_vertex, ArrayList<Cluster> clusters,Random r){
 		
 		InitializeChromosome initializeChromosome = new InitializeChromosome();
 		double[][] offspring = new double[num_vertex][num_vertex];
@@ -95,7 +96,7 @@ public class Mutations {
 		
 		clusterWeightMatrix = initializeChromosome.buildClusterWeightMatrix(parent,
 				clusters.get(indexCluster).getCluster());
-		clusterSpanningTree = mutationForEachClusters(clusterWeightMatrix, numberClusterVertex);
+		clusterSpanningTree = mutationForEachClusters(clusterWeightMatrix, numberClusterVertex, r);
 		
 		// 
 		for( int i = 0; i < numberClusterVertex; i++ ){

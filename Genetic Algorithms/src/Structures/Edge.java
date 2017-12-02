@@ -1,8 +1,8 @@
-package Cluster_Tree;
+package Structures;
 
 public class Edge {
-	int startVertice;
-	int endVertice;
+	public int startVertice;
+	public int endVertice;
 	public Edge(int s_vertice, int e_vertice){
 		startVertice = s_vertice;
 		endVertice = e_vertice;
