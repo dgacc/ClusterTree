@@ -1,4 +1,4 @@
-package Cluster_Tree;
+package Structures;
 
 import java.util.ArrayList;
 
@@ -21,5 +21,6 @@ public class Cluster {
 	public  ArrayList<Integer>  getCluster(){
 		return cluster;
 	}
+	
 
 }

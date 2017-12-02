@@ -1,16 +1,20 @@
-package Cluster_Tree;
+package Dislay;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.*;
 
-class Paint extends JPanel {
+import Files_InOut.ReadFiles;
+import Structures.Cluster;
+import Structures.Vertex;
+
+public class Paint extends JPanel {
     public int num_vertex;
-    private static Vertex[] vertexs = ReadFiles.vertices;
+    private static Vertex[] vertexs = ReadFiles.vertices1;
 //    public double[][] weightMatrix ;
     public double[][] weightMatrix ;
-    private static ArrayList<Cluster> clusters = ReadFiles.clusters;
+    private static ArrayList<Cluster> clusters = ReadFiles.clusters1;
     public double fitness;
     public double fitness1;
     
@@ -44,8 +48,8 @@ class Paint extends JPanel {
         
         
         g2d.setColor(Color.BLACK);
-        g2d.fillOval((int)vertexs[ReadFiles.root].getX()*x - 10 ,
-        		(int)vertexs[ReadFiles.root].getY()*x - 10, 20, 20);
+        g2d.fillOval((int)vertexs[ReadFiles.root1].getX()*x - 10 ,
+        		(int)vertexs[ReadFiles.root1].getY()*x - 10, 20, 20);
         g2d.drawString("fitness:" + fitness , 50, 20);
         g2d.drawString("fitness1:" + fitness1 , 300, 20);
     }

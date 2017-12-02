@@ -1,7 +1,11 @@
-package Cluster_Tree;
+package Structures;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import Files_InOut.ReadFiles;
+import Operator.Evaluation;
+import Operator.Selection;
 
 public class Population {
 	public static int populationLength = 100; // default length of population
