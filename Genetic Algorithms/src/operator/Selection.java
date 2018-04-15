@@ -1,9 +1,9 @@
-package Operator;
+package operator;
 
 import java.util.Random;
 
-import Structures.Individual;
-import Structures.Population;
+import structures.Individual;
+import structures.Population;
 
 public class Selection {
 	Individual individual  = new Individual();

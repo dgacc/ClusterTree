@@ -1,4 +1,4 @@
-package Files_InOut;
+package filesinout;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,8 +9,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Structures.Cluster;
-import Structures.Vertex;
+import structures.Cluster;
+import structures.Vertex;
 
 public class ReadFiles {
 	public static ArrayList<Cluster> clusters = new ArrayList<Cluster>();
@@ -35,6 +35,7 @@ public class ReadFiles {
     
 //    public static  int clusterReadFiles(){
     public static  int clusterReadFiles(String fileName) {
+    	clusters.clear();
 		BufferedReader br = null; // string to store data from file
 		try {
 			String sCurrentLine = null;
@@ -45,7 +46,7 @@ public class ReadFiles {
 			}
 //			System.out.println(" str =  "+str[1]);
 			String[] str = sCurrentLine.split(": ");
-			System.out.println(" str =  "+str[1]);
+//			System.out.println(" str =  "+str[1]);
 			num_vertex = Integer.parseInt(str[1]); 
 			
 //			weightMatrix = new double[num_vertex][num_vertex];
@@ -110,6 +111,7 @@ public class ReadFiles {
     
     
     public static  int clusterReadFiles1(String fileName) {
+    	clusters1.clear();
     	BufferedReader br = null; // string to store data from file
     	try {
     		String sCurrentLine = null;
@@ -120,7 +122,7 @@ public class ReadFiles {
     		}
 //    		System.out.println(" str =  "+str[1]);
     		String[] str = sCurrentLine.split(": ");
-    		System.out.println(" str =  "+str[1]);
+//    		System.out.println(" str =  "+str[1]);
     		num_vertex1 = Integer.parseInt(str[1]); 
     		
 //    		weightMatrix = new double[num_vertex][num_vertex];

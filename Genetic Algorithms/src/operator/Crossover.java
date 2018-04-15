@@ -1,4 +1,4 @@
-package Operator;
+package operator;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -8,14 +8,17 @@ import java.util.Stack;
 
 import javax.swing.JFrame;
 
-import Dislay.Paint;
-import Files_InOut.ReadFiles;
-import Structures.Cluster;
-import Structures.Individual;
+import dislay.Paint;
+import dislay.Windows;
+import filesinout.ReadFiles;
+import random.MyRandom;
+import structures.Cluster;
+import structures.Individual;
 
 
 public class Crossover {
-	InitializeChromosome initilizeChromosome = new InitializeChromosome();
+	private InitializeChromosome initilizeChromosome = new InitializeChromosome();
+    private Mutations mutations = new Mutations();
 	
 	
 	/**
@@ -262,51 +265,68 @@ public class Crossover {
 		child.setGene(primRSTcrossover(par_1.getGene(), par_2.getGene(), num_Genens));
 		return child;
 	}
-	/**
-	 * 
-	 * @param father
-	 * @param mother
-	 * @param num_vertex:  this is the number of vertex max.
-	 * @param clusters
-	 * @param r
-	 * @return
-	 */
-	public double[][] clusterCrossover1(double[][] father,double[][] mother, int num_vertex, ArrayList<Cluster> clusters ,
-		 int[] minClusterVertices ,int[] maxClusterVertices, Random r){
+	
+	
+/**
+ * 
+ * @param father : tree
+ * @param mother : tree
+ * @param num_vertex : number of vertices of tree
+ * @param maxClusters : clusters 
+ * @param numberOfCluster1 : numberOfCluster1  < numberOfCluster2
+ * @param numberOfCluster2 : numberOfCluster1  < numberOfCluster2
+ * @param minClusterVertices  : //array of number of vertex in cluster have less than  the other.
+ * @param maxClusterVertices   //array of number of vertex in cluster have greater than  the other.
+
+ * @param r
+ * @return
+ */
+	public double[][] clusterCrossover1(double[][] father,double[][] mother, int num_vertex,
+			ArrayList<Cluster> maxClusters ,int numberOfCluster1, int numberOfCluster2,
+		int[] minClusterVertices ,int[] maxClusterVertices, Random r , Windows windows1){
 		double[][] Tree = new double[num_vertex][num_vertex];
 		double[][] clusterWeightMatrix1, clusterWeightMatrix2;
 		double[][] spanningTreeOfCluster;
 		int numberClusterVertex = 0;
-		int numberOfCluster = clusters.size();
+		int numberOfCluster = maxClusters.size();
+		
+
 		
 		// 
 		for( int i = 0; i < numberOfCluster; i++){
 			numberClusterVertex = maxClusterVertices[i];
-			clusterWeightMatrix1 = initilizeChromosome.buildClusterWeightMatrix(father, clusters.get(i).getCluster());
-			clusterWeightMatrix2 = initilizeChromosome.buildClusterWeightMatrix(mother, clusters.get(i).getCluster());
+			clusterWeightMatrix1 = initilizeChromosome.buildClusterWeightMatrix(father, maxClusters.get(i).getCluster());
+			clusterWeightMatrix2 = initilizeChromosome.buildClusterWeightMatrix(mother, maxClusters.get(i).getCluster());
 			
 		    spanningTreeOfCluster = primRSTcrossover(clusterWeightMatrix1, clusterWeightMatrix2,  minClusterVertices[i],maxClusterVertices[i], r);
-		
-    
+		   
+		    //debug
+//		    windows1.runWindow(" cluster thu " + i);
+//			Paint  p = new Paint();
+//			p.setPaint(spanningTreeOfCluster, ReadFiles.vertices, ReadFiles.clusters, minClusterVertices[i],0, 0, ReadFiles.root);
+//			windows1.addPaint(p);
+			
+			
+			
+           
 		    // convert to the graph tree
 		    for(int j = 0; j < numberClusterVertex; j++){
 		    	for(int k = 0; k < numberClusterVertex; k++){
-		    		Tree[clusters.get(i).getCluster().get(j)][clusters.get(i).getCluster().get(k)] = spanningTreeOfCluster[j][k];		
+		    		Tree[maxClusters.get(i).getCluster().get(j)][maxClusters.get(i).getCluster().get(k)] = spanningTreeOfCluster[j][k];		
 		    	}
 		    }
 		 
 		}
 		    // build the vertex representation for each cluster
-		    clusterWeightMatrix1 = findSpanningTreeBetweenClusters(father, num_vertex, clusters);
-		    clusterWeightMatrix2 = findSpanningTreeBetweenClusters(mother, num_vertex, clusters);
-		    
-		    // generate the new offspring
-		    spanningTreeOfCluster = primRSTcrossover(clusterWeightMatrix1, clusterWeightMatrix1,numberOfCluster);
+		    clusterWeightMatrix1 = findSpanningTreeBetweenClusters(father, num_vertex, maxClusters);
+		    clusterWeightMatrix2 = findSpanningTreeBetweenClusters(mother, num_vertex, maxClusters);
+		  
+		    spanningTreeOfCluster = primRSTcrossover(clusterWeightMatrix1, clusterWeightMatrix1,numberOfCluster1, numberOfCluster2, r);
 		    // convert to spanning tree of Graph
 		    int[] indexCluster = new int[numberOfCluster];
 		    for(int i = 0; i < numberOfCluster; i++ ){
-		    	int position = r.nextInt(clusters.get(i).getCluster().size());
-		    	indexCluster[i] = clusters.get(i).getCluster().get(position);
+		    	int position = r.nextInt(minClusterVertices[i]);
+		    	indexCluster[i] = maxClusters.get(i).getCluster().get(position);
 		    }
 		    	for( int j = 0; j < numberOfCluster; j++){
 		    		for( int k = 0; k < numberOfCluster; k++){
@@ -316,8 +336,21 @@ public class Crossover {
 		    		}
 		    	}
 		    
+		    	
 		    return Tree;
+		    
+		    
 	}
+	
+	/**
+	 * apply primRSTcrossOver 
+	 * @param father 
+	 * @param mother
+	 * @param minNum_vertex : number of vertices in cluster have number of vertices less than the other. 
+	 * @param maxNum_vertex : number of vertices in cluster have number of vertices greater than the other.
+	 * @param r
+	 * @return tree after apply  primRSTcrossover
+	 */
 	private double[][] primRSTcrossover(double[][] father, double[][] mother, int minNum_vertex, int maxNum_vertex , Random r){
 		 double[][] G_cr = new double[minNum_vertex][minNum_vertex];
 		 double[][] spanningTree = new double[minNum_vertex][minNum_vertex];
@@ -334,13 +367,13 @@ public class Crossover {
 				
 			}
 		}
-		
+		// generate  smaller tree from G-cr matrix which
 		spanningTree = initilizeChromosome.primRST(G_cr, minNum_vertex);
 	
 		
 		 double[][] G_cr1 = new double[maxNum_vertex][maxNum_vertex];
-		 double[][] spanningTree1 = new double[maxNum_vertex][maxNum_vertex];
-		
+		 
+		 //copy the  small  tree to big graph. 
 		for(int i = 0; i < maxNum_vertex; i++){
 			mask[i] = true;
 			for( int j = 0; j < maxNum_vertex; j++){
@@ -353,20 +386,10 @@ public class Crossover {
 			}
 		}
 	   }
-		 // ve
-//		JFrame gf = new JFrame();
-//		gf.setVisible(true);
-//		gf.setSize(800, 800);
-//		gf.setTitle(" cay 1");
-//		gf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		gf.setVisible(true);
-//		
-//		Paint  p = new Paint();
-//		p.weightMatrix = G_cr1;
-//		p.num_vertex = 14;
-//	    gf.add(p);
-//	    gf.setVisible(true);
 		
+		
+		// Initialize label  and add  vertex  in smaller tree
+		// which is connected to the others vertices aren't in  smaller tree  to queue
 		for(int i = 0; i < minNum_vertex; i++){
 			for( int j = minNum_vertex;  j < maxNum_vertex; j++){
 				if(G_cr1[i][j] > 0  && mask[i] ){
@@ -375,22 +398,27 @@ public class Crossover {
 				}
 		}
 		}
-		for( int j = minNum_vertex;  j < maxNum_vertex; j++){
+		
+		
+		// add all of vertices which aren't in smaller tree to queue
+ 		for( int j = minNum_vertex;  j < maxNum_vertex; j++){
 				queue.add(j);
+				mask[j] = false;
 			}
 		
 	
-	
+       // consider vertex in queue to find the cycle and delete a edge 
+ 	   //in cycles and generate bigger tree	
 		while(!queue.isEmpty()){
-			int startVertex = queue.poll();
-//			System.out.println("queue:");
-		
+			int startVertex = queue.poll();		
 			
 			ArrayList<Integer> path = new ArrayList<Integer>();
-			path  = dfs(G_cr1,maxNum_vertex, startVertex);
+			path  = findCycleDFS(G_cr1,maxNum_vertex, startVertex);
 			
-			// delete from cycle
-			if( (path.size() > 1)){	
+			// choose edge is not in tree  then delete that.
+			
+			if( (path.size() > 1)){
+				
 				int index1 = r.nextInt(path.size());
 				while((path.get(index1)  < minNum_vertex) ){
 					index1 = r.nextInt(path.size());	
@@ -404,105 +432,71 @@ public class Crossover {
 					index2 = index1 + 1; 
 				}
 				
+				// delete the edge in that cycle
 				
 				G_cr1[path.get(index1)][path.get(index2)] = 0.0f;
 				G_cr1[path.get(index2)][path.get(index1)] = 0.0f;
 				
 				}
-			System.out.println();
 		}
-		
-
-	
-		
-//		}
-		JFrame gf1 = new JFrame();
-		gf1.setVisible(true);
-		gf1.setSize(800, 800);
-		gf1.setTitle(" cay sau xoa");
-		gf1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gf1.setVisible(true);
-		
-		Paint  p1 = new Paint();
-		p1.weightMatrix = G_cr1;
-		p1.num_vertex = 14;
-	    gf1.add(p1);
-	    gf1.setVisible(true);
     return G_cr1;
     }
-	/**
-	 * this method gonna find the cycles based on the BFS algorithms. 
-	 * @param weightMatrix
-	 * @param num_vertex
-	 * @param startVertex
-	 * @return the list of path we  use that for delete the edges.
-	 */
-	 public LinkedList<Integer> findTheCycle(  double[][] weightMatrix, int num_vertex, int startVertex){
-		  
-			
-			boolean[] mark = new boolean[num_vertex];
-			LinkedList<Integer> preVertex = new LinkedList<Integer>();
-			Stack<Integer> stack = new Stack<Integer>();
-		    // initialize label for each vertex,  
-			for( int i = 0; i < num_vertex; i++){
-				mark[i] = true;
-			}
-			mark[startVertex] = false;
-			stack.push(startVertex);
-			
-			 while(!stack.isEmpty()){
-				 int considerVertex = stack.peek();
-				 int i = 0;
-				 while (i < num_vertex){
-					 if(weightMatrix[considerVertex][i] > 0  && !preVertex.contains(i)){
-						 
-						 stack.push(i);
-						 preVertex.add(i);
-						 mark[i] = false;
-						 considerVertex = stack.pop();
-						 i = 0;
-					 }	else{
-						 i++;
-					 }
-				 }
-				 stack.pop();
-			 }
-		return preVertex;
-		}
-	  public  ArrayList<Integer> dfs(double[][] g_cr1,   int number_of_nodes ,int source)
+	
+	
+      /**
+       *  find  cycle in graph using DFS algorithm,
+       *  we traversal tree by Using the BFS,
+       *  if we have the reserving edges in graph then we have the cycle in that graph, then stop Traversal Tree
+       *  after find the cycle already yet, we  use the previous vertex of the end vertex of that  cycle
+       *  to find  the others vertex based on the previous vertex( recur), over and over again until 
+       *  the start vertex of that cycle, then return the path.
+       * 
+       * @param Graph : that graph  which have cycle inside
+       * @param num_vertices : the number of vertices in that graph
+       * @param startVertex : the start vertex to travel tree
+       * @return The path  in cycle 
+       */
+	
+	  public  ArrayList<Integer> findCycleDFS(double[][] Graph,   int num_vertices ,int startVertex)
 	    {
 		    Stack<Integer> stack = new Stack<Integer>();
-		    int[] preVertex = new int[number_of_nodes];
+		    int[] preVertex = new int[num_vertices];
 			ArrayList<Integer> path = new ArrayList<Integer>();
 			ArrayList<Integer> TreeDFS = new ArrayList<Integer>();
-	        int visited[] = new int[number_of_nodes];		
-	        int element = source;		
-	        int i = source;	
+	        int visited[] = new int[num_vertices];		
+	        int element = startVertex;		
+	        int i = startVertex;	
 	        boolean flag = true;
-	        System.out.print(element + "\t");		
-	        visited[source] = 1;		
-	        stack.push(source);
-	      
-	        TreeDFS.add(source);
-	        for( int k = 0; k < number_of_nodes; k++){
+//	        System.out.print(element + "\t");		
+	        visited[startVertex] = 1;		
+	        stack.push(startVertex);
+	     // initialize the previous vertex for each vertex in graph
+	        
+	        TreeDFS.add(startVertex);
+	        for( int k = 0; k < num_vertices; k++){
 	        	preVertex[k] = -1;
 	        }
-	        preVertex[source] = source;
+	        preVertex[startVertex] = startVertex;
 	 
+	        // start to   DFS  tree traversal use stack structure. 
+	        
 	        while (!stack.isEmpty() && flag)
 	        {
 	            element = stack.peek();
 	            i = 0;	
-		    while (i < number_of_nodes)
+		    while (i < num_vertices)
 		    {
-	     	        if (g_cr1[element][i] == 1 && visited[i] == 0)
+	     	        if (Graph[element][i] > 0 && visited[i] == 0)
 		        {       preVertex[i] = element;
 	                    stack.push(i);
 	                    visited[i] = 1;
 	                    element = i;
 	                    TreeDFS.add(element);
-	                    for( int j = 0; j< number_of_nodes; j++){
-	                    	if((preVertex[j] != -1 )&&(g_cr1[preVertex[j]][element] == 1) && (preVertex[j] != preVertex[element])){
+	                    
+	                    // traversal tree DFS  until detect the reserving edges then stop. return the path.
+	                    
+	                    for( int j = 0; j< num_vertices; j++){
+	                    	if((preVertex[j] != -1 )&&(Graph[preVertex[j]][element] > 0) && (preVertex[j] != preVertex[element])){
 	                    		int temp = element;
 	                    		path.add(element);
 	                    		while( preVertex[temp] != preVertex[j]){
@@ -518,7 +512,7 @@ public class Crossover {
 	                    	}
 	                    }
 	                    i = 0;
-	                    System.out.print(element + "\t");;
+//	                    System.out.print(element + "\t");;
         
 	                }else{
 	                i++;
@@ -526,12 +520,39 @@ public class Crossover {
 		    }
 	            stack.pop();         
 	        }
-	    	System.out.println();
-	        for( int k = 0; k < number_of_nodes; k++){
-	        
-	        	System.out.print(preVertex[k] + "\t");
-	        }
 	        return path;
 	    }
+	 /**
+	  *  
+	  * @param father
+	  * @param mother
+	  * @param genLength
+	  * @param rnd
+	  * @return
+	  */
+	  public ArrayList<int[]>  pruferNumberCrossover(int[] father, int[] mother,  int genLength, Random rnd){
+	  int point = rnd.nextInt(genLength);
+	  int[] offspring1 = new int[genLength];
+	  int[] offspring2 = new int[genLength]; 
+	  ArrayList<int[]> offsprings = new ArrayList<int[]>();
+	  for( int i = 0; i < genLength; i ++){
+		  if(i < point){
+		  offspring1[i] = father[i];
+		  offspring2[i] = mother[i];
+		  }else{
+			  offspring1[i] = mother[i];
+			  offspring2[i] = father[i]; 
+		  }
+	  }
+	  
+	  offsprings.add(offspring1);
+	  offsprings.add(offspring2);
+	  return  offsprings;
+	  }
+	  
+	  
+	  
+	  }
+	  
+		  
 	 
-}
