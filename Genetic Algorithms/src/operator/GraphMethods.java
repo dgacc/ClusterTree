@@ -1,4 +1,4 @@
-package Operator;
+package operator;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

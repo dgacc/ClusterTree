@@ -1,28 +1,31 @@
-package Operator;
+package operator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
 import javax.swing.JFrame;
 
-import Dislay.Paint;
-import Files_InOut.ReadFiles;
-import Structures.Cluster;
-import Structures.Edge;
-import Structures.Individual;
+import dislay.Paint;
+import filesinout.ReadFiles;
+import pruferpresentation.MFEAPruferNumber;
+import random.MyRandom;
+import structures.Cluster;
+import structures.Edge;
+import structures.Individual;
 
 public class InitializeChromosome {
 	public static ArrayList<Cluster> maxClusters = new ArrayList<Cluster>();
-	public static boolean isInstance1[];  // is number of  max vertices in cluster equals number of vertex in cluster instance1 
-	public static boolean isMaxClusterInstance1;  //Return true if cluster in instance 1  have the number of vertex max. 
-	private Random a = new Random();
-    static	int minNumberOfCluster = 0;
-	static int maxNumberOfCluster = 0;
-	public static int maxNumberVertices ;
-    public static int[] maxClusterVertices;
-    public static int[] minClusterVertices;
+//	public static boolean isInstance1[];  // is number of  max vertices in cluster equals number of vertex in cluster instance1 
+//	public static boolean isMaxClusterInstance1;  //Return true if cluster in instance 1  have the number of vertex max. 
+//	private Random a = new Random();
+    static	int minNumberOfCluster = 0; // number of cluster of less between two instances
+	static int maxNumberOfCluster = 0;  // number of cluster of greater  between two instances
+	public static int maxNumberVertices = 0; // number of vertices of  maxInstances
+    public static int[] maxClusterVertices; //array of number of vertex in cluster have greater than  the others.
+    public static int[] minClusterVertices; //array of number of vertex in cluster have less than  the others.
 
 	
 /**
@@ -77,7 +80,7 @@ public class InitializeChromosome {
 		// Each cluster is represented by one vertex
 		Cluster clusterRepresentation = new Cluster();
 		for (int i = 0; i < ReadFiles.numberOfCluster; i++) {
-			int vertex = a.nextInt(clusters.get(i).getCluster().size());
+			int vertex = MyRandom.r.nextInt(clusters.get(i).getCluster().size());
 			clusterRepresentation.getCluster().add(clusters.get(i).getCluster().get(vertex));
 		}
 		clusterWeightMatrix = buildClusterWeightMatrix(weightMatrix, clusterRepresentation.getCluster());
@@ -108,7 +111,7 @@ public class InitializeChromosome {
 		ArrayList<Edge> edgeListAdjacence = new ArrayList<Edge>();
 		double[][] tempTable = new double[num_vertices][num_vertices];
 
-		randomVertice = a.nextInt(num_vertices);
+		randomVertice = MyRandom.r.nextInt(num_vertices);
 		contain.add(randomVertice);
 		edgeListAdjacence.addAll(findEdge(num_vertices, randomVertice, contain, weightMatrix));
 
@@ -118,7 +121,7 @@ public class InitializeChromosome {
 				return null;
 			}
 
-			indexRandomEdge = a.nextInt(edgeListAdjacence.size());
+			indexRandomEdge = MyRandom.r.nextInt(edgeListAdjacence.size());
 			Edge tempEdge = new Edge(edgeListAdjacence.get(indexRandomEdge).startVertice,
 					edgeListAdjacence.get(indexRandomEdge).endVertice);
 			edgeListAdjacence.remove(indexRandomEdge);
@@ -268,34 +271,33 @@ public class InitializeChromosome {
 		}
 		return result;
 	}
+	
+	
+	
 	/**
-	 * After call this method all of the Information in the common gene going to be update
-	 * Calculate  the  number of  vertices in cluster min for each cluster 
+	 * After call this method all of the Information in the common gene going to be updated
+	 * Calculate  the  number of  vertices in cluster min for each cluster( 
 	 * Calculate  the  number of  vertices in cluster max for each cluster 
 	 * And calculate the maxNumberVertices, then calculate  the number of cluster for each instance 
 	 * Update the value of each the instance variables on top
-	 * @param clusters1 : The list of vertices in instance 1
-	 * @param clusters2 : The list of vertices in instance 2
+	 * @param clusters1 : The list of cluster in instance 1
+	 * @param clusters2 : The list of cluster in instance 2
 	 */
 	public void clutersVerticesInf(ArrayList<Cluster> clusters1, ArrayList<Cluster> clusters2){
 		maxNumberVertices = 0;
-	 if(clusters1.size() < clusters2.size()){
-		 isMaxClusterInstance1 = false; 
+	 if(clusters1.size() <= clusters2.size()){
 		 minNumberOfCluster = clusters1.size();
 		 maxNumberOfCluster = clusters2.size();
-		 isInstance1 = new boolean[maxNumberOfCluster];
-		 minClusterVertices = new int[maxNumberOfCluster];
-		 maxClusterVertices = new int[maxNumberOfCluster];
+		 minClusterVertices = new int[maxNumberOfCluster]; //the number of vertices less than in two instances
+		 maxClusterVertices = new int[maxNumberOfCluster]; //the number of vertices greater than in two instances
 		 
 		 
 		 for( int i = 0; i < minNumberOfCluster  ; i++){
 				if(clusters1.get(i).getCluster().size() < clusters2.get(i).getCluster().size()){
-					isInstance1[i] = false;
 					minClusterVertices[i] = clusters1.get(i).getCluster().size();
 					maxClusterVertices[i] = clusters2.get(i).getCluster().size();
 					maxNumberVertices += maxClusterVertices[i];
 				}else{
-					isInstance1[i] = true;
 					minClusterVertices[i] = clusters2.get(i).getCluster().size();
 					maxClusterVertices[i] = clusters1.get(i).getCluster().size();
 					maxNumberVertices += maxClusterVertices[i];
@@ -303,12 +305,10 @@ public class InitializeChromosome {
 			 }
 		 
 		 for(int j = minNumberOfCluster; j < clusters2.size(); j++){
-			 isInstance1[j] = false;
 			 minClusterVertices[j] = maxClusterVertices[j] = clusters2.get(j).getCluster().size();
 			 maxNumberVertices += maxClusterVertices[j];
 		 }
 	 }else{
-		 isMaxClusterInstance1 = true;
 		 minNumberOfCluster = clusters2.size();
 		 maxNumberOfCluster = clusters1.size();
 		 
@@ -334,15 +334,15 @@ public class InitializeChromosome {
 	}
 	/**
 	 * 
-	 * @param clusters : the cluster is mapped  to use for two instances
+	 * @param maxClusters : the cluster is mapped  to use for two instances( List of clusters in two instances)
 	 * @param r
 	 * @return
 	 */
 	
 	
-	public double[][] decodeGroupGene(ArrayList<Cluster> clusters, Random r){
+	public double[][] initializeGroupGene(ArrayList<Cluster> maxClusters, Random r){
 	
-		
+	
 		
 		double[][] treeMax  = new double[maxNumberVertices][maxNumberVertices];
 		double[][] weightMatrix = new double[maxNumberVertices][maxNumberVertices];
@@ -355,24 +355,25 @@ public class InitializeChromosome {
 		
 		// initialize gene for each cluster 
 		 for(int i = 0; i < maxNumberOfCluster; i++){
-			 //small 
+			
 			double[][] bigClusterTree =  new double[ maxClusterVertices[i]][ maxClusterVertices[i]];
 			double[][] smallClusterTree =  new double[ minClusterVertices[i]][ minClusterVertices[i]];
+			
 			for(int j = 0; j < minClusterVertices[i]; j++){
 				for(int k = 0; k < minClusterVertices[i]; k++){
 				smallClusterTree[j][k] = 1.0f;
 				}
 			}
-		    
+		    // use primRST to generate tree for smallClusterTree
 			smallClusterTree = primRST(smallClusterTree,minClusterVertices[i]);
-			
+			// copy smallClusterTree to bigClusterTree
 			for(int j = 0; j < minClusterVertices[i]; j++){
 				for(int k = 0; k < minClusterVertices[i]; k++){
 				bigClusterTree[j][k] = smallClusterTree[j][k]; 
 				}
 			}
 			
-			
+			// add edges to bigClusterTree without making cycle randomly.
 		    int tempNum =  minClusterVertices[i];
 			while(tempNum < maxClusterVertices[i]){
 				int randomIndex = r.nextInt(tempNum);
@@ -380,11 +381,12 @@ public class InitializeChromosome {
 				bigClusterTree[tempNum][randomIndex] = 1.0f;
 				tempNum++;
 		    }
-			// transform to the max tree
+			
+			// transform to the max tree( Tree of Two instances)
 			for(int j = 0; j < maxClusterVertices[i]; j++){
 				for(int k = 0; k < maxClusterVertices[i]; k++){
 					if(bigClusterTree[j][k] > 0){
-					treeMax[clusters.get(i).getCluster().get(j)][clusters.get(i).getCluster().get(k)]
+					treeMax[maxClusters.get(i).getCluster().get(j)][maxClusters.get(i).getCluster().get(k)]
 							= bigClusterTree[j][k];
 							}
 				}
@@ -393,18 +395,22 @@ public class InitializeChromosome {
 		 }
 		 
 		 
-		 //---------------------------End initialize gene for each cluster---------------------------//
 		 
-		 // Start to initialize for presentation cluster.
+		 //---------------------------End initialize gene for each cluster---------------------------//
+	
+		 
+		 
+		 // -----------------------Start to initialize for presentation cluster----------------------//
+		 
 		 
 		 // build up the Tree for  presentation Cluster in  instance which has the number of clusters less than. 
 		 double[][] clusterWeightMatrix;
 		 double[][] smallClusterSpanningTree;
-	     // choose randomly the presentation  for  small presentation cluster
+	     // choose randomly the presentation  vertex is in instance have less than number of clusters 
 		 Cluster clusterRepresentation =  new Cluster();
 		 for( int i = 0; i < minNumberOfCluster; i++ ){
-			 int vertex = r.nextInt(minClusterVertices[i]);
-			 clusterRepresentation.getCluster().add(clusters.get(i).getCluster().get(vertex));
+			 int vertex = r.nextInt(minClusterVertices[i]); 
+			 clusterRepresentation.getCluster().add(maxClusters.get(i).getCluster().get(vertex));
 	
 		 }
 		 
@@ -413,14 +419,14 @@ public class InitializeChromosome {
 	     smallClusterSpanningTree = primRST(clusterWeightMatrix,minNumberOfCluster);
 	     
 	     
-	     // Choose randomly the presentation for big presentation cluster
+	     //  choose randomly the presentation  vertex is in instance have greater number of clusters 
 	     for(int i = minNumberOfCluster; i < maxNumberOfCluster; i++ ){
 	    	 int vertex = r.nextInt(minClusterVertices[i]);
-	    	 clusterRepresentation.getCluster().add(clusters.get(i).getCluster().get(vertex));
+	    	 clusterRepresentation.getCluster().add(maxClusters.get(i).getCluster().get(vertex));
 	    	 
 	     }
 
-	     // Copy the matrix of the small presentation cluster to big presentation cluster. 
+	     // copy  
 	     double[][] bigClusterSpanningTree = new double[maxNumberOfCluster][maxNumberOfCluster];
 	     for(int j = 0; j < minNumberOfCluster; j++){
 				for(int k = 0; k < minNumberOfCluster; k++){
@@ -458,7 +464,7 @@ public class InitializeChromosome {
 	 *  the last cluster = (..........(number of vertices in last cluster max - 1)+(number of vertices in last  cluster max ))
 	 */
 	public static  void buildCluster(){
-
+        maxClusters.clear();
 		int count = 0;
 		
 		for(int i = 0 ; i < maxNumberOfCluster; i++){
@@ -472,15 +478,15 @@ public class InitializeChromosome {
 	}
 	
 /**
- * Tách từ cây biểu diễn chung ra các lời giải để dánh giá. 
- * @param maxTree
- * @param clusters1
- * @param clusters2
- * @param num_vertices1
- * @param num_vertices2
+ * Tách từ cây biểu diễn chung ra các l�?i giải để dánh giá. 
+ * @param maxTree: Tree  of two instances 
+ * @param clusters1 : List of clusters in each cluster of instance 1 
+ * @param clusters2 :  List of clusters in each cluster of instance 2 
+ * @param num_vertices1 : Number of vertices in instance 1 
+ * @param num_vertices2 : Number of vertices in instance 2 
  * @return
  */
-	public ArrayList<double[][]> devideTwoTree(double[][] maxTree, ArrayList<Cluster> clusters1,
+	public ArrayList<double[][]> decodingTwoTree(double[][] maxTree, ArrayList<Cluster> clusters1,
 			ArrayList<Cluster> clusters2,int num_vertices1,int num_vertices2 , Random r) {
 		
 		GraphMethods graphMethods = new GraphMethods();
@@ -496,7 +502,7 @@ public class InitializeChromosome {
 			for( int i = 0; i < numberOfcluster1; i ++){
 				  double[][] TreeOfEachCluster =  buildClusterWeightMatrix(maxTree, maxClusters.get(i).getCluster());
 				  
-			        // copy the tree in Each cluster for Tree in Instance1.
+			        // copy the tree in Each cluster  in for Tree in Instance1.
 			        for( int j = 0 ; j < clusters1.get(i).getCluster().size(); j++){
 			        	for(int k = 0; k < clusters1.get(i).getCluster().size(); k++){
 			        		if(TreeOfEachCluster[j][k]  > 0){
@@ -505,8 +511,9 @@ public class InitializeChromosome {
 			        		}
 			        	}
 			        }
-			 
 			}
+			
+			
 			weightTree1 = findSpanningTreeBetweenClusters(maxTree,num_vertices1, maxClusters, clusters1);
 			for( int j = 0 ; j < num_vertices1; j++){
 	        	for(int k = 0; k < num_vertices1; k++){	
@@ -542,33 +549,19 @@ public class InitializeChromosome {
 	        		}
 	        	}
 			list.add(TreeInst2);
-			
-//			  // ve
-//					JFrame gf = new JFrame();
-//					gf.setVisible(true);
-//					gf.setSize(800, 800);
-//					gf.setTitle(" cay 1");
-//					gf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//					gf.setVisible(true);
-//					
-//					Paint  p = new Paint();
-//					p.weightMatrix = TreeInst2;
-//					p.num_vertex = 76;
-//				    gf.add(p);
-//				    gf.setVisible(true);
 					
 	        return list;
 			}
 		
 	
 	/**
-	 * 
-	 * @param parent
-	 * @param num_vertex
-	 * @param clusters
-	 * @return the spanning tree between clusters 
+	 * find the edges connect all of clusters altogether. 
+	 * @param parent :  tree input ( tree of two instances is presented by matrix weight)
+	 * @param num_vertex : the number of  vertices in  tree input.
+	 * @param maxClusters : List of vertices in two instances
+	 * @return Edges between clusters  is  separated in matrix  weight
 	 */
-	public double[][] findSpanningTreeBetweenClusters(double[][] parent, int num_vertex, ArrayList<Cluster> clusters,  ArrayList<Cluster> clusters1 ){
+	public double[][] findSpanningTreeBetweenClusters(double[][] parent, int num_vertex, ArrayList<Cluster> maxClusters,  ArrayList<Cluster> clusters1 ){
 		int numberOfCluster = clusters1.size();
 		double[][]  tree = new double[num_vertex][num_vertex];
 		int numberClusterVertex1 = 0;
@@ -587,7 +580,7 @@ public class InitializeChromosome {
 					numberClusterVertex2 = clusters1.get(k).getCluster().size();
 					
 					for( int t = 0; t < numberClusterVertex2; t++){
-					if(parent[clusters.get(i).getCluster().get(j)][clusters.get(k).getCluster().get(t)] > 0){
+					if(parent[maxClusters.get(i).getCluster().get(j)][maxClusters.get(k).getCluster().get(t)] > 0){
 						
 						tree[clusters1.get(i).getCluster().get(j)][clusters1.get(k).getCluster().get(t)]  = 1.0f;
 						tree[clusters1.get(k).getCluster().get(t)][clusters1.get(i).getCluster().get(j)]  = 1.0f;
@@ -599,8 +592,60 @@ public class InitializeChromosome {
 		return tree;
 	}
 	
-
+	/**
+	 * 
+	 * @param clusters
+	 * @param popLength
+	 * @param rnd
+	 * @return
+	 */
+	public ArrayList<Individual>  initiaizePopulation(ArrayList<Cluster> clusters, int popLength, Random rnd){
+		   ArrayList<Individual> population = new ArrayList<Individual>();
+		   MFEAPruferNumber mfeaPruferNumber = new MFEAPruferNumber();
+		for(int m = 0; m < popLength; m++){
+		ArrayList<Integer> temp = new ArrayList<Integer>();
+		ArrayList<Integer> temp1 = new ArrayList<Integer>();
+		ArrayList<Integer> temp3 = new ArrayList<Integer>();
+		temp3.removeAll(temp3);
+		Individual individual = new Individual();
+	 
 	
+	int numberOfClusters = clusters.size();
+	int[] presentVertex = new int[numberOfClusters];
+	
+	for( int  i = 0; i < numberOfClusters; i ++ ){
+	
+	temp.add(i,i);
+	int numberClusterVertex = clusters.get(i).getCluster().size();
+	 presentVertex[i] =  rnd.nextInt(numberClusterVertex);
+	for(int j = 0; j < numberClusterVertex; j ++){
+		temp1.add(j,j);
+	}
+	Collections.shuffle(temp1, rnd);
+	temp1 = mfeaPruferNumber.deletePruferNumber(temp1, rnd);
+	temp3.addAll(temp1);
+	temp1.removeAll(temp1);
+	}
+	
+	Collections.shuffle(temp, rnd);
+	temp = mfeaPruferNumber.deletePruferNumber(temp, rnd);
+	temp3.addAll(temp);
+	temp.removeAll(temp);
+	int num  = temp3.size() + numberOfClusters;
+	int k = 0;
+	for(int i = 0; i < num; i ++){ 
+		if(i < temp3.size()){
+		individual.getGene1()[i] = temp3.get(i);
+		} else{
+			individual.getGene1()[i] = presentVertex[k];
+			k++;
+		}
+	}
+	population.add(individual);
+		}
+		return population;
+	}
+
 
 }
 

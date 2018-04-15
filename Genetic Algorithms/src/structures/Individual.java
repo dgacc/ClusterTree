@@ -1,4 +1,4 @@
-package Structures;
+package structures;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -7,32 +7,33 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import Files_InOut.ReadFiles;
-import Operator.Evaluation;
-import Operator.InitializeChromosome;
+import filesinout.ReadFiles;
+import operator.Evaluation;
+import operator.InitializeChromosome;
 
 public class Individual {
 	public  static int num_vertex = ReadFiles.num_vertex;
-	public  double[][] gene =  new double[num_vertex][num_vertex]; 
+	private   double[][] gene =  new double[num_vertex][num_vertex]; 
+	private int[] gene1 = new int[5000];
 	InitializeChromosome initializechromosome = new InitializeChromosome();
 	Evaluation evaluation = new Evaluation();
-	private double[] constraintViolation;
-	private double[] factorialCost;
+	protected double[] constraintViolation;
+	protected double[] factorialCost;
 	public double cost;
-	private int[] factorialRank = new int[2];
-	double scalarFitness;
-	int skillFactor;
+	protected int[] factorialRank = new int[2];
+	protected double scalarFitness;
+	protected int skillFactor;
 	
 	
 	public Individual() {
 	}
     public void inintilizeIndividual(){
-    	gene = initializechromosome.clusterPrimRST(ReadFiles.weightMatrix, ReadFiles.clusters, ReadFiles.num_vertex);
+    	this.gene = initializechromosome.clusterPrimRST(ReadFiles.weightMatrix, ReadFiles.clusters, ReadFiles.num_vertex);
  
     }
     // getter
     public double[][] getGene(){
-    	return gene;
+    	return this.gene;
     }
     //setter
     public void setGene(double[][] gene){
@@ -85,6 +86,12 @@ public class Individual {
 
 	public void setSkillFactor(int skillFactor) {
 		this.skillFactor = skillFactor;
+	}
+	public void setGene(int[] gene1){
+		this.gene1 = gene1;
+	}
+	public int[] getGene1(){
+		return this.gene1;
 	}
    
 }
