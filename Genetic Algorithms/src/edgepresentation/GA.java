@@ -3,10 +3,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.swing.*;
 
-import dislay.Paint;
-import dislay.Windows;
+
+//import dislay.Paint;
+//import dislay.Windows;
 import filesinout.ReadFiles;
 import operator.Crossover;
 import operator.Mutations;
@@ -28,7 +28,7 @@ public class GA{
 
 
 	public static void main(String[] args) {
-		String[] test = {"50pr439","75lin105","5i500-304","6i500","7i70-21","9pr439-3x3","2lin105-2x1","7i70-21"};
+		String[] test = {"2lin105-2x1"};
 		for(int k= 0; k < test.length; k++){
 		ReadFiles.clusterReadFiles("test/"+test[k]+".clt");
 //	    ReadFiles.clusterReadFiles("C:/Users/TrungTB/Desktop/test/" +args[0]+ ".clt");

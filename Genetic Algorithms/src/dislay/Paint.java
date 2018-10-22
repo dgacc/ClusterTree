@@ -5,12 +5,15 @@ import java.util.Random;
 
 import javax.swing.*;
 
-import filesinout.ReadFiles;
 import structures.Cluster;
 import structures.Vertex;
 
 public class Paint extends JPanel {
-    public int num_vertex;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public int num_vertex;
     private Vertex[] vertexs; 
     private  double[][] weightMatrix ;
     private ArrayList<Cluster> clusters;

@@ -1,19 +1,12 @@
 package structures;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
 
 import filesinout.ReadFiles;
 import operator.Evaluation;
 import operator.InitializeChromosome;
 
 public class Individual {
-	public  static int num_vertex = ReadFiles.num_vertex;
-	private   double[][] gene =  new double[num_vertex][num_vertex]; 
+	public static int num_vertex = ReadFiles.num_vertex;
+	private double[][] gene = new double[num_vertex][num_vertex];
 	private int[] gene1 = new int[5000];
 	InitializeChromosome initializechromosome = new InitializeChromosome();
 	Evaluation evaluation = new Evaluation();
@@ -23,27 +16,32 @@ public class Individual {
 	protected int[] factorialRank = new int[2];
 	protected double scalarFitness;
 	protected int skillFactor;
-	
-	
+
 	public Individual() {
 	}
-    public void inintilizeIndividual(){
-    	this.gene = initializechromosome.clusterPrimRST(ReadFiles.weightMatrix, ReadFiles.clusters, ReadFiles.num_vertex);
- 
-    }
-    // getter
-    public double[][] getGene(){
-    	return this.gene;
-    }
-    //setter
-    public void setGene(double[][] gene){
-    	 this.gene = gene;	
-    }
-    
-    // get fitness
-    public double getFitness(Individual individual){
-    	 return evaluation.evaluation(ReadFiles.weightMatrix, individual.getGene(),  ReadFiles.num_vertex, ReadFiles.root);
-    }
+
+	public void inintilizeIndividual() {
+		this.gene = initializechromosome.clusterPrimRST(ReadFiles.weightMatrix, ReadFiles.clusters,
+				ReadFiles.num_vertex);
+
+	}
+
+	// getter
+	public double[][] getGene() {
+		return this.gene;
+	}
+
+	// setter
+	public void setGene(double[][] gene) {
+		this.gene = gene;
+	}
+
+	// get fitness
+	public double getFitness(Individual individual) {
+		return evaluation.evaluation(ReadFiles.weightMatrix, individual.getGene(), ReadFiles.num_vertex,
+				ReadFiles.root);
+	}
+
 	public void setFactorialRank(int rank, int index) {
 		this.factorialRank[index] = rank;
 	}
@@ -87,11 +85,13 @@ public class Individual {
 	public void setSkillFactor(int skillFactor) {
 		this.skillFactor = skillFactor;
 	}
-	public void setGene(int[] gene1){
+
+	public void setGene(int[] gene1) {
 		this.gene1 = gene1;
 	}
-	public int[] getGene1(){
+
+	public int[] getGene1() {
 		return this.gene1;
 	}
-   
+
 }

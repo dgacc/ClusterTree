@@ -1,12 +1,9 @@
 package structures;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import filesinout.ReadFiles;
 import operator.Evaluation;
-import operator.Selection;
-import random.MyRandom;
 
 public class Population {
 	public static int populationLength = 100; // default length of population
