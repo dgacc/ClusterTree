@@ -1,5 +1,4 @@
 package pruferpresentation;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,6 +18,7 @@ import random.MyRandom;
 import structures.Individual;
 import structures.Population;
 
+
 public class GAPruferNumber {
 	private static double m_rate = 0.05;
 	private static final double p_rate = 0.5; // crossover rate
@@ -28,6 +28,7 @@ public class GAPruferNumber {
 	private static Mutations mutation = new Mutations();
 	private static Selection selection = new Selection();
 	private static Evaluation evaluation = new Evaluation();
+
 
 	public static void main(String[] args) {
 		MFEAPruferNumber mfeaPruferNumber = new MFEAPruferNumber();
@@ -171,5 +172,6 @@ public class GAPruferNumber {
 		Collections.sort(pop, ChromosomeCmp.compareByFactorialCost);
 
 	}
+
 }
 

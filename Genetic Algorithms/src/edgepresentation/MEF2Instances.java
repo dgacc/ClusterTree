@@ -1,12 +1,15 @@
 package edgepresentation;
 
 import java.io.File;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
+
+
 
 import dislay.Windows;
 import filesinout.ReadFiles;
@@ -19,10 +22,13 @@ import random.MyRandom;
 import structures.Cluster;
 import structures.Individual;
 
+
+
 public class MEF2Instances {
 	ReadFiles re = new ReadFiles();
 	public Evaluation eva = new Evaluation();
 	protected Individual chromo = new Individual();
+
 	protected Mutations mutation = new Mutations();
 	protected Crossover crossover = new Crossover();
 	protected static double crossOverRate = 0.5;
@@ -239,12 +245,15 @@ public class MEF2Instances {
 			// System.out.println(pop.get(i).getFactorialCost()[0] + " ");
 		}
 		sortByCostIndex(pop, pop_size, 1);
+
 		for (int i = 0; i < pop_size; i++) {
 			pop.get(i).setFactorialRank(i + 1, 1);
 		}
 	}
 
+
 	public static void calculateScalarFitness(ArrayList<Individual> pop, int pop_size) {
+
 		for (int i = 0; i < pop_size; i++) {
 			if (pop.get(i).getFactorialRank()[0] < pop.get(i).getFactorialRank()[1]) {
 				pop.get(i).setSkillFactor(0);
@@ -257,9 +266,11 @@ public class MEF2Instances {
 		Collections.sort(pop, ChromosomeCmp.compareByScalarFitness);
 	}
 
+
 	/**
 	 * calculate factorial cost
 	 * 
+
 	 * @param pop
 	 */
 	public static void calculate(ArrayList<Individual> pop, int pop_size) {
@@ -272,6 +283,7 @@ public class MEF2Instances {
 		int num_vertex1 = ReadFiles.num_vertex;
 		int num_vertex2 = ReadFiles.num_vertex1;
 
+
 		for (int i = 0; i < pop_size; i++) {
 			double[] temp = new double[2];
 			ArrayList<double[][]> TreeForEachInst = new ArrayList<double[][]>();
@@ -280,6 +292,7 @@ public class MEF2Instances {
 
 			temp[0] = mc.eva.evaluation(weightMatrix, TreeForEachInst.get(0), num_vertex1, startVertex1);
 			temp[1] = mc.eva.evaluation(weightMatrix1, TreeForEachInst.get(1), num_vertex2, startVertex2);
+
 			pop.get(i).setFactorialCost(temp);
 		}
 
@@ -289,6 +302,7 @@ public class MEF2Instances {
 		for (int i = 0; i < pop_size; i++) {
 			pop.get(i).cost = pop.get(i).getFactorialCost()[index];
 		}
+
 		Collections.sort(pop, ChromosomeCmp.compareByFactorialCost);
 
 	}
@@ -302,6 +316,7 @@ public class MEF2Instances {
 		}
 
 	}
+
 
 	public static String getDateFromMillis(long millis) {
 		String string = String.format("%02d:%02d:%02d.%03d", TimeUnit.MILLISECONDS.toHours(millis),
@@ -323,5 +338,6 @@ public class MEF2Instances {
 		}
 		return 1.0 / numberVertices;
 	}
+
 
 }

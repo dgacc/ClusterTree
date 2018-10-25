@@ -1,6 +1,7 @@
 package pruferpresentation;
 
 import java.io.File;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -41,15 +42,15 @@ public class MFEAPruferNumber {
 	public static int defaultPopLength = 100;
 
 	public static void main(String[] args) {
-		String str = args[0];
-		String[] test = str.split("_");
-		// String[] test = { "5eil51", "5eil76" };
-		// ReadFiles.clusterReadFiles("C:/Users/TrungTB/Desktop/test/" + test[0]
-		// + ".clt");
-		// ReadFiles.clusterReadFiles1("C:/Users/TrungTB/Desktop/test/" +
-		// test[1] + ".clt");
-		ReadFiles.clusterReadFiles("test/" + test[0] + ".clt");
-		ReadFiles.clusterReadFiles1("test/" + test[1] + ".clt");
+//		String str = args[0];
+//		String[] test = str.split("_");
+		 String[] test = { "15eil51", "15eil76" };
+		 ReadFiles.clusterReadFiles("C:/Users/TrungTB/Desktop/test/" + test[0]
+		 + ".clt");
+		 ReadFiles.clusterReadFiles1("C:/Users/TrungTB/Desktop/test/" +
+		 test[1] + ".clt");
+//		ReadFiles.clusterReadFiles("test/" + test[0] + ".clt");
+//		ReadFiles.clusterReadFiles1("test/" + test[1] + ".clt");
 		MFEAPruferNumber mfeaPruferNumber = new MFEAPruferNumber();
 
 		System.out.println(
@@ -212,6 +213,7 @@ public class MFEAPruferNumber {
 	}
 
 	public static void calculateScalarFitness(ArrayList<Individual> pop, int pop_size) {
+
 		for (int i = 0; i < pop_size; i++) {
 			if (pop.get(i).getFactorialRank()[0] < pop.get(i).getFactorialRank()[1]) {
 				pop.get(i).setSkillFactor(0);
@@ -221,21 +223,25 @@ public class MFEAPruferNumber {
 				pop.get(i).setScalarFitness(1.0 / (pop.get(i).getFactorialRank()[1]) + 1);
 			}
 		}
+
 	}
 
 	/**
 	 * calculate factorial cost
 	 * 
+
 	 * @param pop
 	 */
 	public static void calculate(ArrayList<Individual> pop, int pop_size) {
 		MEF2Instances mc = new MEF2Instances();
+
 		double weightMatrix[][] = ReadFiles.weightMatrix;
 		double[][] weightMatrix1 = ReadFiles.weightMatrix1;
 		int startVertex1 = ReadFiles.root;
 		int startVertex2 = ReadFiles.root1;
 		int num_vertex1 = ReadFiles.num_vertex;
 		int num_vertex2 = ReadFiles.num_vertex1;
+
 		int[] startPoint = mc.eva.getStartPoint(InitializeChromosome.maxClusters);
 
 		for (int i = 0; i < pop_size; i++) {
@@ -264,6 +270,7 @@ public class MFEAPruferNumber {
 
 			}
 
+
 			pop.get(i).setFactorialCost(temp);
 		}
 
@@ -273,6 +280,7 @@ public class MFEAPruferNumber {
 		for (int i = 0; i < pop_size; i++) {
 			pop.get(i).cost = pop.get(i).getFactorialCost()[index];
 		}
+
 		Collections.sort(pop, ChromosomeCmp.compareByFactorialCost);
 
 	}
@@ -286,6 +294,7 @@ public class MFEAPruferNumber {
 		}
 
 	}
+
 
 	public static String getDateFromMillis(long millis) {
 		String string = String.format("%02d:%02d:%02d.%03d", TimeUnit.MILLISECONDS.toHours(millis),
@@ -357,9 +366,11 @@ public class MFEAPruferNumber {
 	 * @param clusters
 	 *            : the set of vertices
 	 * @param popLength
+
 	 * @param rnd
 	 * @return
 	 */
+
 
 	public ArrayList<Individual> initiaizePopulation(ArrayList<Cluster> clusters, int popLength, Random rnd) {
 		ArrayList<Individual> population = new ArrayList<Individual>();
@@ -420,11 +431,13 @@ public class MFEAPruferNumber {
 	 */
 
 	public ArrayList<Integer> deletePruferNumber(ArrayList<Integer> individual, Random rnd) {
+
 		int geneLength = individual.size();
 		individual.remove(geneLength - 1);
 		individual.remove(geneLength - 2);
 		return individual;
 	}
+
 
 	/**
 	 * calculate the length of prufernumber gene;

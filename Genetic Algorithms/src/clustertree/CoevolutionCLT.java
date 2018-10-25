@@ -18,12 +18,14 @@ import structures.Population;
 public class CoevolutionCLT {
 	private static double m_rate = 0.15;
 	private static final double p_rate = 0.8; // crossover rate
+
 	private static int generation = 500;
 	public static int populationLength = 100; // default length of population
 	private static Crossover crossover = new Crossover();
 	private static Mutations mutation = new Mutations();
 	private static Selection selection = new Selection();
 	private static Evaluation evaluation = new Evaluation();
+
 
 	public static void main(String arg[]) {
 		double[] popFitness;
@@ -154,6 +156,7 @@ public class CoevolutionCLT {
 		return twoPopulation;
 	}
 
+
 	/**
 	 * set active and frozen to the sub-population
 	 */
@@ -211,10 +214,12 @@ public class CoevolutionCLT {
 					pruferCode[j] = activeChro[j];
 				} else {
 					pruferCode[j] = prozenChro[j - pointDivide];
+
 				}
 			}
 			individual.setGene(pruferCode);
 			population.addIndiv(individual);
+
 		}
 		return population;
 
@@ -233,11 +238,13 @@ public class CoevolutionCLT {
 		int bestFitnessIndex = 0;
 		for (int i = 0; i < populationLength; i++) {
 			if (popFitness[i] < bestFitness) {
+
 				bestFitness = popFitness[i];
 				bestFitnessIndex = i;
 			}
 		}
 		return bestFitnessIndex;
 	}
+
 
 }

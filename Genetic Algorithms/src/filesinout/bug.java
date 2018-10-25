@@ -1,9 +1,16 @@
 package filesinout;
 
+<<<<<<< HEAD
 //import java.util.ArrayList;
 //import java.util.Random;
 //
 //import structures.Edge;
+=======
+import java.util.ArrayList;
+import java.util.Random;
+
+import structures.Edge;
+>>>>>>> ead2afb1c0227e8c156ffd108b5b33e2a06076a3
 
 public class bug {
 	///*-----------------------------------------Build the new instance--------------------------------------------------------------*/

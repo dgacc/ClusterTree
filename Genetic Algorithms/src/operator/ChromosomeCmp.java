@@ -34,4 +34,5 @@ public class ChromosomeCmp implements Comparator<Individual> {
 			return Integer.compare(cluster2.getCluster().size(), cluster1.getCluster().size());
 		}
 	};
+
 }
